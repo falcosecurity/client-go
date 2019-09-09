@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/falcosecurity/client-go/pkg/api/output"
 	"github.com/falcosecurity/client-go/pkg/client"
 	"google.golang.org/grpc"
@@ -44,6 +43,6 @@ func main() {
 		if err != nil {
 			log.Fatalf("error closing stream after EOF: %v", err)
 		}
-		spew.Dump(res)
+		log.Printf("rule: %s\n", res.Rule)
 	}
 }
