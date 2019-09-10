@@ -1,4 +1,5 @@
 # Falco Go Client
+[![GoDoc](https://godoc.org/github.com/falcosecurity/client-go/pkg/client?status.svg)](https://godoc.org/github.com/falcosecurity/client-go/pkg/client)
 
 > Go client and SDK for Falco
 
