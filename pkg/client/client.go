@@ -1,10 +1,14 @@
 package client
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
+	"io/ioutil"
 
 	"github.com/falcosecurity/client-go/pkg/api/output"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 // Client is a wrapper for the gRPC connection
@@ -16,16 +20,43 @@ type Client struct {
 
 // Config is the configuration definition for connecting to a Falco gRPC server.
 type Config struct {
-	Target  string
-	Options []grpc.DialOption
+	Hostname   string
+	Port       uint16
+	CertFile   string
+	KeyFile    string
+	CARootFile string
 }
+
+const targetFormat = "%s:%d"
 
 // NewForConfig is used to create a new Falco gRPC client.
 func NewForConfig(config *Config) (*Client, error) {
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(config.Target, config.Options...)
+	certificate, err := tls.LoadX509KeyPair(
+		config.CertFile,
+		config.KeyFile,
+	)
+
+	certPool := x509.NewCertPool()
+	rootCA, err := ioutil.ReadFile(config.CARootFile)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error reading the CA Root file certificate: %v", err)
+	}
+
+	ok := certPool.AppendCertsFromPEM(rootCA)
+	if !ok {
+		return nil, fmt.Errorf("error appending the root CA to the certificate pool")
+	}
+
+	transportCreds := credentials.NewTLS(&tls.Config{
+		ServerName:   config.Hostname,
+		Certificates: []tls.Certificate{certificate},
+		RootCAs:      certPool,
+	})
+
+	dialOption := grpc.WithTransportCredentials(transportCreds)
+	conn, err := grpc.Dial(fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOption)
+	if err != nil {
+		return nil, fmt.Errorf("error dialing server: %v", err)
 	}
 
 	return &Client{
@@ -35,11 +66,11 @@ func NewForConfig(config *Config) (*Client, error) {
 
 // Output is the client for Falco Outputs.
 // When using it you can use `subscribe()` to receive a stream of falco output events.
-func (c *Client) Output() (output.FalcoOutputServiceClient, error) {
+func (c *Client) Output() (output.ServiceClient, error) {
 	if err := c.checkConn(); err != nil {
 		return nil, err
 	}
-	return output.NewFalcoOutputServiceClient(c.conn), nil
+	return output.NewServiceClient(c.conn), nil
 }
 
 // Close the connection to the falco gRPC server.
@@ -52,7 +83,7 @@ func (c *Client) Close() error {
 
 func (c *Client) checkConn() error {
 	if c.conn == nil {
-		return fmt.Errorf("missing gRPC connection for the current client")
+		return fmt.Errorf("missing connection for the current client")
 	}
 	return nil
 }
