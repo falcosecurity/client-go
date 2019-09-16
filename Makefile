@@ -4,7 +4,7 @@ PROTOC ?= $(shell which protoc)
 
 PROTOS := pkg/api/output/falco_output.proto
 PROTO_URLS := https://raw.githubusercontent.com/falcosecurity/falco/feat/grpc-server-poc/userspace/falco/falco_output.proto
-PROTO_SHAS := 242637535f207c242a7631e4c1364908ca2bf2d5632ccc673890e26ca7580aa6
+PROTO_SHAS := 73b436b6980800981e1269dc194e51205f1f55b6c9a3072f37a6ce4aa7938455
 
 # $(1): the proto path
 # $(2): the proto URL

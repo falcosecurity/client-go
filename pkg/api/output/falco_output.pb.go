@@ -29,35 +29,83 @@ type Priority int32
 
 const (
 	Priority_EMERGENCY     Priority = 0
+	Priority_emergency     Priority = 0
+	Priority_Emergency     Priority = 0
 	Priority_ALERT         Priority = 1
+	Priority_alert         Priority = 1
+	Priority_Alert         Priority = 1
 	Priority_CRITICAL      Priority = 2
+	Priority_critical      Priority = 2
+	Priority_Critical      Priority = 2
 	Priority_ERROR         Priority = 3
+	Priority_error         Priority = 3
+	Priority_Error         Priority = 3
 	Priority_WARNING       Priority = 4
+	Priority_warning       Priority = 4
+	Priority_Warning       Priority = 4
 	Priority_NOTICE        Priority = 5
+	Priority_notice        Priority = 5
+	Priority_Notice        Priority = 5
 	Priority_INFORMATIONAL Priority = 6
+	Priority_informational Priority = 6
+	Priority_Informational Priority = 6
 	Priority_DEBUG         Priority = 7
+	Priority_debug         Priority = 7
+	Priority_Debug         Priority = 7
 )
 
 var Priority_name = map[int32]string{
 	0: "EMERGENCY",
+	// Duplicate value: 0: "emergency",
+	// Duplicate value: 0: "Emergency",
 	1: "ALERT",
+	// Duplicate value: 1: "alert",
+	// Duplicate value: 1: "Alert",
 	2: "CRITICAL",
+	// Duplicate value: 2: "critical",
+	// Duplicate value: 2: "Critical",
 	3: "ERROR",
+	// Duplicate value: 3: "error",
+	// Duplicate value: 3: "Error",
 	4: "WARNING",
+	// Duplicate value: 4: "warning",
+	// Duplicate value: 4: "Warning",
 	5: "NOTICE",
+	// Duplicate value: 5: "notice",
+	// Duplicate value: 5: "Notice",
 	6: "INFORMATIONAL",
+	// Duplicate value: 6: "informational",
+	// Duplicate value: 6: "Informational",
 	7: "DEBUG",
+	// Duplicate value: 7: "debug",
+	// Duplicate value: 7: "Debug",
 }
 
 var Priority_value = map[string]int32{
 	"EMERGENCY":     0,
+	"emergency":     0,
+	"Emergency":     0,
 	"ALERT":         1,
+	"alert":         1,
+	"Alert":         1,
 	"CRITICAL":      2,
+	"critical":      2,
+	"Critical":      2,
 	"ERROR":         3,
+	"error":         3,
+	"Error":         3,
 	"WARNING":       4,
+	"warning":       4,
+	"Warning":       4,
 	"NOTICE":        5,
+	"notice":        5,
+	"Notice":        5,
 	"INFORMATIONAL": 6,
+	"informational": 6,
+	"Informational": 6,
 	"DEBUG":         7,
+	"debug":         7,
+	"Debug":         7,
 }
 
 func (x Priority) String() string {
@@ -72,17 +120,32 @@ type Source int32
 
 const (
 	Source_SYSCALL   Source = 0
+	Source_syscall   Source = 0
+	Source_Syscall   Source = 0
 	Source_K8S_AUDIT Source = 1
+	Source_k8s_audit Source = 1
+	Source_K8s_audit Source = 1
+	Source_K8S_audit Source = 1
 )
 
 var Source_name = map[int32]string{
 	0: "SYSCALL",
+	// Duplicate value: 0: "syscall",
+	// Duplicate value: 0: "Syscall",
 	1: "K8S_AUDIT",
+	// Duplicate value: 1: "k8s_audit",
+	// Duplicate value: 1: "K8s_audit",
+	// Duplicate value: 1: "K8S_audit",
 }
 
 var Source_value = map[string]int32{
 	"SYSCALL":   0,
+	"syscall":   0,
+	"Syscall":   0,
 	"K8S_AUDIT": 1,
+	"k8s_audit": 1,
+	"K8s_audit": 1,
+	"K8S_audit": 1,
 }
 
 func (x Source) String() string {
@@ -93,7 +156,7 @@ func (Source) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_0087b3f605d16fd1, []int{1}
 }
 
-type FalcoOutputRequest struct {
+type Request struct {
 	Duration             string   `protobuf:"bytes,1,opt,name=duration,proto3" json:"duration,omitempty"`
 	Keepalive            bool     `protobuf:"varint,2,opt,name=keepalive,proto3" json:"keepalive,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -101,126 +164,118 @@ type FalcoOutputRequest struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *FalcoOutputRequest) Reset()         { *m = FalcoOutputRequest{} }
-func (m *FalcoOutputRequest) String() string { return proto.CompactTextString(m) }
-func (*FalcoOutputRequest) ProtoMessage()    {}
-func (*FalcoOutputRequest) Descriptor() ([]byte, []int) {
+func (m *Request) Reset()         { *m = Request{} }
+func (m *Request) String() string { return proto.CompactTextString(m) }
+func (*Request) ProtoMessage()    {}
+func (*Request) Descriptor() ([]byte, []int) {
 	return fileDescriptor_0087b3f605d16fd1, []int{0}
 }
 
-func (m *FalcoOutputRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_FalcoOutputRequest.Unmarshal(m, b)
+func (m *Request) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Request.Unmarshal(m, b)
 }
-func (m *FalcoOutputRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_FalcoOutputRequest.Marshal(b, m, deterministic)
+func (m *Request) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Request.Marshal(b, m, deterministic)
 }
-func (m *FalcoOutputRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FalcoOutputRequest.Merge(m, src)
+func (m *Request) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Request.Merge(m, src)
 }
-func (m *FalcoOutputRequest) XXX_Size() int {
-	return xxx_messageInfo_FalcoOutputRequest.Size(m)
+func (m *Request) XXX_Size() int {
+	return xxx_messageInfo_Request.Size(m)
 }
-func (m *FalcoOutputRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_FalcoOutputRequest.DiscardUnknown(m)
+func (m *Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_Request.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_FalcoOutputRequest proto.InternalMessageInfo
+var xxx_messageInfo_Request proto.InternalMessageInfo
 
-func (m *FalcoOutputRequest) GetDuration() string {
+func (m *Request) GetDuration() string {
 	if m != nil {
 		return m.Duration
 	}
 	return ""
 }
 
-func (m *FalcoOutputRequest) GetKeepalive() bool {
+func (m *Request) GetKeepalive() bool {
 	if m != nil {
 		return m.Keepalive
 	}
 	return false
 }
 
-type FalcoOutputResponse struct {
-	Id                   string               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Time                 *timestamp.Timestamp `protobuf:"bytes,2,opt,name=time,proto3" json:"time,omitempty"`
-	Priority             Priority             `protobuf:"varint,3,opt,name=priority,proto3,enum=Priority" json:"priority,omitempty"`
-	Source               Source               `protobuf:"varint,4,opt,name=source,proto3,enum=Source" json:"source,omitempty"`
-	Rule                 string               `protobuf:"bytes,5,opt,name=rule,proto3" json:"rule,omitempty"`
-	Output               string               `protobuf:"bytes,6,opt,name=output,proto3" json:"output,omitempty"`
-	OutputFields         map[string]string    `protobuf:"bytes,7,rep,name=output_fields,json=outputFields,proto3" json:"output_fields,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+type Response struct {
+	Time                 *timestamp.Timestamp `protobuf:"bytes,1,opt,name=time,proto3" json:"time,omitempty"`
+	Priority             Priority             `protobuf:"varint,2,opt,name=priority,proto3,enum=falco.output.Priority" json:"priority,omitempty"`
+	Source               Source               `protobuf:"varint,3,opt,name=source,proto3,enum=falco.output.Source" json:"source,omitempty"`
+	Rule                 string               `protobuf:"bytes,4,opt,name=rule,proto3" json:"rule,omitempty"`
+	Output               string               `protobuf:"bytes,5,opt,name=output,proto3" json:"output,omitempty"`
+	OutputFields         map[string]string    `protobuf:"bytes,6,rep,name=output_fields,json=outputFields,proto3" json:"output_fields,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
 	XXX_unrecognized     []byte               `json:"-"`
 	XXX_sizecache        int32                `json:"-"`
 }
 
-func (m *FalcoOutputResponse) Reset()         { *m = FalcoOutputResponse{} }
-func (m *FalcoOutputResponse) String() string { return proto.CompactTextString(m) }
-func (*FalcoOutputResponse) ProtoMessage()    {}
-func (*FalcoOutputResponse) Descriptor() ([]byte, []int) {
+func (m *Response) Reset()         { *m = Response{} }
+func (m *Response) String() string { return proto.CompactTextString(m) }
+func (*Response) ProtoMessage()    {}
+func (*Response) Descriptor() ([]byte, []int) {
 	return fileDescriptor_0087b3f605d16fd1, []int{1}
 }
 
-func (m *FalcoOutputResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_FalcoOutputResponse.Unmarshal(m, b)
+func (m *Response) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Response.Unmarshal(m, b)
 }
-func (m *FalcoOutputResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_FalcoOutputResponse.Marshal(b, m, deterministic)
+func (m *Response) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Response.Marshal(b, m, deterministic)
 }
-func (m *FalcoOutputResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FalcoOutputResponse.Merge(m, src)
+func (m *Response) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Response.Merge(m, src)
 }
-func (m *FalcoOutputResponse) XXX_Size() int {
-	return xxx_messageInfo_FalcoOutputResponse.Size(m)
+func (m *Response) XXX_Size() int {
+	return xxx_messageInfo_Response.Size(m)
 }
-func (m *FalcoOutputResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_FalcoOutputResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_FalcoOutputResponse proto.InternalMessageInfo
-
-func (m *FalcoOutputResponse) GetId() string {
-	if m != nil {
-		return m.Id
-	}
-	return ""
+func (m *Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_Response.DiscardUnknown(m)
 }
 
-func (m *FalcoOutputResponse) GetTime() *timestamp.Timestamp {
+var xxx_messageInfo_Response proto.InternalMessageInfo
+
+func (m *Response) GetTime() *timestamp.Timestamp {
 	if m != nil {
 		return m.Time
 	}
 	return nil
 }
 
-func (m *FalcoOutputResponse) GetPriority() Priority {
+func (m *Response) GetPriority() Priority {
 	if m != nil {
 		return m.Priority
 	}
 	return Priority_EMERGENCY
 }
 
-func (m *FalcoOutputResponse) GetSource() Source {
+func (m *Response) GetSource() Source {
 	if m != nil {
 		return m.Source
 	}
 	return Source_SYSCALL
 }
 
-func (m *FalcoOutputResponse) GetRule() string {
+func (m *Response) GetRule() string {
 	if m != nil {
 		return m.Rule
 	}
 	return ""
 }
 
-func (m *FalcoOutputResponse) GetOutput() string {
+func (m *Response) GetOutput() string {
 	if m != nil {
 		return m.Output
 	}
 	return ""
 }
 
-func (m *FalcoOutputResponse) GetOutputFields() map[string]string {
+func (m *Response) GetOutputFields() map[string]string {
 	if m != nil {
 		return m.OutputFields
 	}
@@ -228,46 +283,53 @@ func (m *FalcoOutputResponse) GetOutputFields() map[string]string {
 }
 
 func init() {
-	proto.RegisterEnum("Priority", Priority_name, Priority_value)
-	proto.RegisterEnum("Source", Source_name, Source_value)
-	proto.RegisterType((*FalcoOutputRequest)(nil), "falco_output_request")
-	proto.RegisterType((*FalcoOutputResponse)(nil), "falco_output_response")
-	proto.RegisterMapType((map[string]string)(nil), "falco_output_response.OutputFieldsEntry")
+	proto.RegisterEnum("falco.output.Priority", Priority_name, Priority_value)
+	proto.RegisterEnum("falco.output.Source", Source_name, Source_value)
+	proto.RegisterType((*Request)(nil), "falco.output.request")
+	proto.RegisterType((*Response)(nil), "falco.output.response")
+	proto.RegisterMapType((map[string]string)(nil), "falco.output.response.OutputFieldsEntry")
 }
 
 func init() { proto.RegisterFile("falco_output.proto", fileDescriptor_0087b3f605d16fd1) }
 
 var fileDescriptor_0087b3f605d16fd1 = []byte{
-	// 463 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x52, 0x5d, 0x6b, 0xdb, 0x30,
-	0x14, 0xad, 0x9d, 0xc4, 0x89, 0x6f, 0x9b, 0xa2, 0x5e, 0xda, 0x62, 0xc2, 0xa0, 0xa1, 0x6c, 0x10,
-	0xfa, 0xa0, 0x8e, 0xec, 0xa5, 0x8c, 0xc1, 0xf0, 0x52, 0x37, 0x98, 0x25, 0xce, 0x50, 0x5c, 0x46,
-	0x9f, 0x42, 0x3e, 0x94, 0x22, 0xea, 0x46, 0x9e, 0x2c, 0x07, 0xf2, 0x5b, 0xf7, 0x67, 0x86, 0xe5,
-	0xa4, 0x2d, 0x5d, 0xde, 0x74, 0x8e, 0xce, 0x3d, 0x9c, 0x7b, 0xb8, 0x80, 0xcb, 0x69, 0x32, 0x97,
-	0x13, 0x99, 0xeb, 0x34, 0xd7, 0x34, 0x55, 0x52, 0xcb, 0xd6, 0xc5, 0xa3, 0x94, 0x8f, 0x09, 0xbf,
-	0x36, 0x68, 0x96, 0x2f, 0xaf, 0xb5, 0x78, 0xe6, 0x99, 0x9e, 0x3e, 0xa7, 0xa5, 0xe0, 0xf2, 0x17,
-	0x9c, 0xbe, 0x1d, 0x9b, 0x28, 0xfe, 0x27, 0xe7, 0x99, 0xc6, 0x16, 0x34, 0x16, 0xb9, 0x9a, 0x6a,
-	0x21, 0x57, 0x9e, 0xd5, 0xb6, 0x3a, 0x2e, 0x7b, 0xc1, 0xf8, 0x01, 0xdc, 0x27, 0xce, 0xd3, 0x69,
-	0x22, 0xd6, 0xdc, 0xb3, 0xdb, 0x56, 0xa7, 0xc1, 0x5e, 0x89, 0xcb, 0xbf, 0x36, 0x9c, 0xbd, 0xb3,
-	0xcc, 0x52, 0xb9, 0xca, 0x38, 0x1e, 0x83, 0x2d, 0x16, 0x5b, 0x37, 0x5b, 0x2c, 0x90, 0x42, 0xb5,
-	0x88, 0x63, 0x2c, 0x0e, 0xbb, 0x2d, 0x5a, 0x66, 0xa5, 0xbb, 0xac, 0x34, 0xde, 0x65, 0x65, 0x46,
-	0x87, 0x9f, 0xa0, 0x91, 0x2a, 0x21, 0x95, 0xd0, 0x1b, 0xaf, 0xd2, 0xb6, 0x3a, 0xc7, 0x5d, 0x97,
-	0xee, 0x08, 0xf6, 0xf2, 0x85, 0x17, 0xe0, 0x64, 0x32, 0x57, 0x73, 0xee, 0x55, 0x8d, 0xa8, 0x4e,
-	0x4b, 0xc8, 0xb6, 0x34, 0x22, 0x54, 0x55, 0x9e, 0x70, 0xaf, 0x66, 0x92, 0x98, 0x37, 0x9e, 0x83,
-	0x53, 0xc6, 0xf5, 0x1c, 0xc3, 0x6e, 0x11, 0x0e, 0xa1, 0xb9, 0x5d, 0x63, 0x29, 0x78, 0xb2, 0xc8,
-	0xbc, 0x7a, 0xbb, 0xd2, 0x39, 0xec, 0x76, 0xe8, 0xde, 0x15, 0xe9, 0xc8, 0xe0, 0x3b, 0x23, 0x0d,
-	0x56, 0x5a, 0x6d, 0xd8, 0x91, 0x7c, 0x43, 0xb5, 0xbe, 0xc3, 0xc9, 0x7f, 0x12, 0x24, 0x50, 0x79,
-	0xe2, 0x9b, 0x6d, 0x31, 0xc5, 0x13, 0x4f, 0xa1, 0xb6, 0x9e, 0x26, 0x79, 0x59, 0x8d, 0xcb, 0x4a,
-	0xf0, 0xd5, 0xbe, 0xb1, 0xae, 0xf4, 0x6b, 0x07, 0xd8, 0x04, 0x37, 0x18, 0x06, 0xac, 0x1f, 0x44,
-	0xbd, 0x07, 0x72, 0x80, 0x2e, 0xd4, 0xfc, 0x41, 0xc0, 0x62, 0x62, 0xe1, 0x11, 0x34, 0x7a, 0x2c,
-	0x8c, 0xc3, 0x9e, 0x3f, 0x20, 0x76, 0xf1, 0x11, 0x30, 0x36, 0x62, 0xa4, 0x82, 0x87, 0x50, 0xff,
-	0xed, 0xb3, 0x28, 0x8c, 0xfa, 0xa4, 0x8a, 0x00, 0x4e, 0x34, 0x8a, 0xc3, 0x5e, 0x40, 0x6a, 0x78,
-	0x02, 0xcd, 0x30, 0xba, 0x1b, 0xb1, 0xa1, 0x1f, 0x87, 0xa3, 0xc8, 0x1f, 0x10, 0xa7, 0x18, 0xbb,
-	0x0d, 0x7e, 0xdc, 0xf7, 0x49, 0xfd, 0xea, 0xe3, 0xae, 0xd2, 0xc2, 0x60, 0xfc, 0x30, 0xee, 0xf9,
-	0x83, 0x01, 0x39, 0x28, 0x02, 0xfc, 0xbc, 0x19, 0x4f, 0xfc, 0xfb, 0xdb, 0x30, 0x26, 0x56, 0x37,
-	0x7e, 0x77, 0x4b, 0x19, 0x57, 0x6b, 0x31, 0xe7, 0xf8, 0x0d, 0xdc, 0x2c, 0x9f, 0x65, 0x73, 0x25,
-	0x66, 0x1c, 0xcf, 0xe8, 0xbe, 0x7b, 0x6b, 0x9d, 0xef, 0x2f, 0xf4, 0xb3, 0x35, 0x73, 0xcc, 0x3d,
-	0x7c, 0xf9, 0x17, 0x00, 0x00, 0xff, 0xff, 0xab, 0x7f, 0xfb, 0x4d, 0xdf, 0x02, 0x00, 0x00,
+	// 572 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x93, 0xdf, 0x6a, 0xdb, 0x30,
+	0x14, 0x87, 0xeb, 0xfc, 0xf7, 0x69, 0x33, 0x5c, 0xd1, 0x95, 0x60, 0x06, 0x2b, 0xbd, 0x0a, 0x65,
+	0xb8, 0x23, 0xbb, 0x29, 0x63, 0x30, 0x3c, 0xd7, 0x0d, 0xa6, 0xa9, 0x03, 0x4a, 0x4a, 0xe9, 0x55,
+	0x70, 0x1c, 0x25, 0x88, 0x3a, 0x96, 0x27, 0xc9, 0x1d, 0x79, 0xc7, 0x3d, 0xc0, 0x1e, 0x67, 0x48,
+	0x8a, 0xd3, 0x36, 0xdb, 0xdd, 0xf7, 0xfd, 0x74, 0x6c, 0x49, 0x87, 0x23, 0x40, 0xcb, 0x24, 0x4b,
+	0xd9, 0x8c, 0x95, 0xb2, 0x28, 0xa5, 0x57, 0x70, 0x26, 0x19, 0x3a, 0xd2, 0x99, 0x67, 0x32, 0xf7,
+	0xe3, 0x8a, 0xb1, 0x55, 0x46, 0x2e, 0xf5, 0xda, 0xbc, 0x5c, 0x5e, 0x4a, 0xba, 0x26, 0x42, 0x26,
+	0xeb, 0xc2, 0x94, 0x9f, 0x07, 0xd0, 0xe6, 0xe4, 0x67, 0x49, 0x84, 0x44, 0x2e, 0x74, 0x16, 0x25,
+	0x4f, 0x24, 0x65, 0x79, 0xcf, 0x3a, 0xb3, 0xfa, 0x36, 0xde, 0x39, 0xfa, 0x00, 0xf6, 0x13, 0x21,
+	0x45, 0x92, 0xd1, 0x67, 0xd2, 0xab, 0x9d, 0x59, 0xfd, 0x0e, 0x7e, 0x09, 0xce, 0xff, 0xd4, 0xa0,
+	0xc3, 0x89, 0x28, 0x58, 0x2e, 0x08, 0xf2, 0xa0, 0xa1, 0x36, 0xd1, 0xbf, 0x38, 0x1c, 0xb8, 0x9e,
+	0x39, 0x81, 0x57, 0x9d, 0xc0, 0x9b, 0x56, 0x27, 0xc0, 0xba, 0x0e, 0x0d, 0xa0, 0x53, 0x70, 0xca,
+	0x38, 0x95, 0x1b, 0xfd, 0xe7, 0x77, 0x83, 0x53, 0xef, 0xf5, 0x1d, 0xbc, 0x6a, 0x15, 0xef, 0xea,
+	0xd0, 0x27, 0x68, 0x09, 0x56, 0xf2, 0x94, 0xf4, 0xea, 0xfa, 0x8b, 0x93, 0xb7, 0x5f, 0x98, 0x35,
+	0xbc, 0xad, 0x41, 0x08, 0x1a, 0xbc, 0xcc, 0x48, 0xaf, 0xa1, 0x2f, 0xa5, 0x19, 0x9d, 0x42, 0xcb,
+	0x14, 0xf7, 0x9a, 0x3a, 0xdd, 0x1a, 0xba, 0x83, 0xae, 0xa1, 0xd9, 0x92, 0x92, 0x6c, 0x21, 0x7a,
+	0xad, 0xb3, 0x7a, 0xff, 0x70, 0xd0, 0x7f, 0xbb, 0x41, 0x75, 0x59, 0x6f, 0xac, 0xfd, 0x46, 0x97,
+	0x86, 0xb9, 0xe4, 0x1b, 0x7c, 0xc4, 0x5e, 0x45, 0xee, 0x77, 0x38, 0xfe, 0xa7, 0x04, 0x39, 0x50,
+	0x7f, 0x22, 0x9b, 0x6d, 0x8f, 0x15, 0xa2, 0x13, 0x68, 0x3e, 0x27, 0x59, 0x69, 0x5a, 0x6b, 0x63,
+	0x23, 0x5f, 0x6b, 0x57, 0xd6, 0xc5, 0xef, 0xda, 0x4b, 0x7b, 0x50, 0x17, 0xec, 0xf0, 0x2e, 0xc4,
+	0xc3, 0x30, 0x0e, 0x1e, 0x9d, 0x03, 0xa5, 0x64, 0x4d, 0xf8, 0x8a, 0xe4, 0xe9, 0xc6, 0x68, 0xf8,
+	0x4a, 0x6d, 0x68, 0xfa, 0xa3, 0x10, 0x4f, 0x1d, 0x4b, 0x61, 0x92, 0x11, 0x2e, 0x0d, 0xfa, 0x5b,
+	0x3c, 0x82, 0x4e, 0x80, 0xa3, 0x69, 0x14, 0xf8, 0x23, 0xa7, 0xa6, 0x2c, 0xe5, 0x54, 0xd2, 0x34,
+	0xc9, 0x8c, 0x05, 0x2f, 0x66, 0x43, 0x33, 0xc4, 0x78, 0x8c, 0x9d, 0xba, 0x42, 0xc2, 0x39, 0xe3,
+	0x06, 0xc3, 0x2d, 0x1e, 0x42, 0xfb, 0xc1, 0xc7, 0x71, 0x14, 0x0f, 0x9d, 0x86, 0x92, 0x5f, 0x09,
+	0xcf, 0x69, 0xbe, 0x32, 0xf2, 0xb0, 0x13, 0x80, 0x56, 0x3c, 0x9e, 0x46, 0x41, 0xe8, 0x34, 0x15,
+	0xe7, 0x4c, 0xd2, 0x94, 0x18, 0x8e, 0x2b, 0x3e, 0x86, 0x6e, 0x14, 0xdf, 0x8c, 0xf1, 0x9d, 0x3f,
+	0x8d, 0xc6, 0xb1, 0x3f, 0x72, 0x5a, 0x2a, 0xa2, 0xf9, 0x92, 0xf1, 0xb5, 0x9e, 0xc5, 0x24, 0x33,
+	0x51, 0xb4, 0x17, 0xd9, 0xd0, 0xbc, 0x0e, 0x7f, 0xdc, 0x0f, 0x9d, 0xb6, 0xc2, 0x05, 0x99, 0x97,
+	0x2b, 0x83, 0xd7, 0x06, 0xdd, 0x9a, 0x63, 0x5d, 0xb0, 0x6a, 0x70, 0xd4, 0xc1, 0x26, 0x8f, 0x93,
+	0xc0, 0x1f, 0x8d, 0x9c, 0x03, 0x25, 0x62, 0x23, 0xd2, 0x24, 0xcb, 0x8c, 0x4c, 0x76, 0xd2, 0x05,
+	0xfb, 0xf6, 0x6a, 0x32, 0xf3, 0xef, 0xaf, 0x23, 0xd5, 0xc9, 0x2e, 0xd8, 0x4f, 0x57, 0x62, 0x96,
+	0x94, 0x0b, 0x2a, 0x8d, 0xde, 0xee, 0xeb, 0xa4, 0x52, 0xb5, 0xe1, 0x60, 0x08, 0x6d, 0x41, 0xf8,
+	0x33, 0x4d, 0x09, 0xfa, 0x06, 0xb6, 0x28, 0xe7, 0x22, 0xe5, 0x74, 0x4e, 0xd0, 0xfb, 0xfd, 0x81,
+	0xd2, 0x6f, 0xd0, 0x3d, 0xfd, 0xff, 0x9c, 0x7d, 0xb6, 0xe6, 0x2d, 0xfd, 0x80, 0xbe, 0xfc, 0x0d,
+	0x00, 0x00, 0xff, 0xff, 0x6c, 0xba, 0xd0, 0xcc, 0xf4, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -278,27 +340,27 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// FalcoOutputServiceClient is the client API for FalcoOutputService service.
+// ServiceClient is the client API for Service service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type FalcoOutputServiceClient interface {
-	Subscribe(ctx context.Context, in *FalcoOutputRequest, opts ...grpc.CallOption) (FalcoOutputService_SubscribeClient, error)
+type ServiceClient interface {
+	Subscribe(ctx context.Context, in *Request, opts ...grpc.CallOption) (Service_SubscribeClient, error)
 }
 
-type falcoOutputServiceClient struct {
+type serviceClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewFalcoOutputServiceClient(cc *grpc.ClientConn) FalcoOutputServiceClient {
-	return &falcoOutputServiceClient{cc}
+func NewServiceClient(cc *grpc.ClientConn) ServiceClient {
+	return &serviceClient{cc}
 }
 
-func (c *falcoOutputServiceClient) Subscribe(ctx context.Context, in *FalcoOutputRequest, opts ...grpc.CallOption) (FalcoOutputService_SubscribeClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_FalcoOutputService_serviceDesc.Streams[0], "/falco_output_service/subscribe", opts...)
+func (c *serviceClient) Subscribe(ctx context.Context, in *Request, opts ...grpc.CallOption) (Service_SubscribeClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Service_serviceDesc.Streams[0], "/falco.output.service/subscribe", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &falcoOutputServiceSubscribeClient{stream}
+	x := &serviceSubscribeClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -308,69 +370,69 @@ func (c *falcoOutputServiceClient) Subscribe(ctx context.Context, in *FalcoOutpu
 	return x, nil
 }
 
-type FalcoOutputService_SubscribeClient interface {
-	Recv() (*FalcoOutputResponse, error)
+type Service_SubscribeClient interface {
+	Recv() (*Response, error)
 	grpc.ClientStream
 }
 
-type falcoOutputServiceSubscribeClient struct {
+type serviceSubscribeClient struct {
 	grpc.ClientStream
 }
 
-func (x *falcoOutputServiceSubscribeClient) Recv() (*FalcoOutputResponse, error) {
-	m := new(FalcoOutputResponse)
+func (x *serviceSubscribeClient) Recv() (*Response, error) {
+	m := new(Response)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
 }
 
-// FalcoOutputServiceServer is the server API for FalcoOutputService service.
-type FalcoOutputServiceServer interface {
-	Subscribe(*FalcoOutputRequest, FalcoOutputService_SubscribeServer) error
+// ServiceServer is the server API for Service service.
+type ServiceServer interface {
+	Subscribe(*Request, Service_SubscribeServer) error
 }
 
-// UnimplementedFalcoOutputServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedFalcoOutputServiceServer struct {
+// UnimplementedServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedServiceServer struct {
 }
 
-func (*UnimplementedFalcoOutputServiceServer) Subscribe(req *FalcoOutputRequest, srv FalcoOutputService_SubscribeServer) error {
+func (*UnimplementedServiceServer) Subscribe(req *Request, srv Service_SubscribeServer) error {
 	return status.Errorf(codes.Unimplemented, "method Subscribe not implemented")
 }
 
-func RegisterFalcoOutputServiceServer(s *grpc.Server, srv FalcoOutputServiceServer) {
-	s.RegisterService(&_FalcoOutputService_serviceDesc, srv)
+func RegisterServiceServer(s *grpc.Server, srv ServiceServer) {
+	s.RegisterService(&_Service_serviceDesc, srv)
 }
 
-func _FalcoOutputService_Subscribe_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(FalcoOutputRequest)
+func _Service_Subscribe_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Request)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(FalcoOutputServiceServer).Subscribe(m, &falcoOutputServiceSubscribeServer{stream})
+	return srv.(ServiceServer).Subscribe(m, &serviceSubscribeServer{stream})
 }
 
-type FalcoOutputService_SubscribeServer interface {
-	Send(*FalcoOutputResponse) error
+type Service_SubscribeServer interface {
+	Send(*Response) error
 	grpc.ServerStream
 }
 
-type falcoOutputServiceSubscribeServer struct {
+type serviceSubscribeServer struct {
 	grpc.ServerStream
 }
 
-func (x *falcoOutputServiceSubscribeServer) Send(m *FalcoOutputResponse) error {
+func (x *serviceSubscribeServer) Send(m *Response) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-var _FalcoOutputService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "falco_output_service",
-	HandlerType: (*FalcoOutputServiceServer)(nil),
+var _Service_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "falco.output.service",
+	HandlerType: (*ServiceServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "subscribe",
-			Handler:       _FalcoOutputService_Subscribe_Handler,
+			Handler:       _Service_Subscribe_Handler,
 			ServerStreams: true,
 		},
 	},
