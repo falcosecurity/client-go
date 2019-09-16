@@ -19,15 +19,15 @@ package main
 
 imports(
     "github.com/falcosecurity/client-go/pkg/client"
-    "google.golang.org/grpc"
 )
 
 func main() {
     c, err := client.NewForConfig(&client.Config{
-        Target: "localhost:5060",
-        Options: []grpc.DialOption{
-            grpc.WithInsecure(),
-        },
+        Hostname:   "localhost",
+		Port:       5060,
+		CertFile:   "/tmp/client.crt",
+		KeyFile:    "/tmp/client.key",
+		CARootFile: "/tmp/ca.crt",
     })
 }
 ```
@@ -44,7 +44,7 @@ if err != nil {
 ctx := context.Background()
 // Keepalive true means that the client will wait indefinitely for new events to come
 // Use keepalive false if you only want to receive the accumulated events and stop
-fcs, err := outputClient.Subscribe(ctx, &output.FalcoOutputRequest{Keepalive: true})
+fcs, err := outputClient.Subscribe(ctx, &output.Request{Keepalive: true})
 if err != nil {
     log.Fatalf("could not subscribe: %v", err)
 }
