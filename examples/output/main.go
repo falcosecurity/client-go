@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 
@@ -12,7 +14,7 @@ import (
 func main() {
 	//Set up a connection to the server.
 	c, err := client.NewForConfig(&client.Config{
-		Hostname:   "127.0.0.1",
+		Hostname:   "localhost",
 		Port:       5060,
 		CertFile:   "/tmp/client.crt",
 		KeyFile:    "/tmp/client.key",
@@ -43,6 +45,10 @@ func main() {
 		if err != nil {
 			log.Fatalf("error closing stream after EOF: %v", err)
 		}
-		log.Printf("rule: %s\n", res.Rule)
+		out, err := json.Marshal(res)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(out))
 	}
 }
