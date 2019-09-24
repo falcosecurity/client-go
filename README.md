@@ -9,6 +9,20 @@
 go get -u github.com/falcosecurity/client-go
 ```
 
+## Update protos
+
+Perform the following edits to the Makefile:
+
+1. Update the `PROTOS` array with the destination path of the `.proto` fike.
+2. Update the `PROTO_URLS` array with the URL from which to download it.
+3. Update thr `PROTO_SHAS` array with the SHA256 sum of the file to download.
+4. Execute the following commands:
+
+```console
+make clean
+make protos
+```
+
 ## Usage
 
 ### Client creation
