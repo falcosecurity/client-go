@@ -1,17 +1,8 @@
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
+package falco.schema;
 
-package falco.output;
-
-service service {
-  rpc subscribe(request) returns (stream response);
-}
-
-message request {
-  string duration = 1; // TODO(leodido, fntlnz): not handled yet but keeping for reference.
-  bool keepalive = 2;
-}
+option go_package = "github.com/falcosecurity/client-go/pkg/api/schema";
 
 enum priority {
   option allow_alias = true;
@@ -40,7 +31,7 @@ enum priority {
   debug = 7;
   Debug = 7;
 }
-
+  
 enum source {
   option allow_alias = true;
   SYSCALL = 0;
@@ -51,14 +42,3 @@ enum source {
   K8s_audit = 1;
   K8S_audit = 1;
 }
-
-message response {
-  google.protobuf.Timestamp time = 1;
-  priority priority = 2;
-  source source = 3;
-  string rule = 4;
-  string output = 5;
-  map<string, string> output_fields = 6;
-}
-
-// todo: investigate outputting tags

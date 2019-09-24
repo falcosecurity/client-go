@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "schema.proto";
+
+package falco.output;
+
+option go_package = "github.com/falcosecurity/client-go/pkg/api/output";
+
+service service {
+  rpc subscribe(request) returns (stream response);
+}
+
+message request {
+  bool keepalive = 1;
+  // string duration = 2; // TODO(leodido, fntlnz): not handled yet but keeping for reference.
+  // repeated string tags = 3; // TODO(leodido, fntlnz): not handled yet but keeping for reference.
+}
+
+message response {
+  google.protobuf.Timestamp time = 1;
+  falco.schema.priority priority = 2;
+  falco.schema.source source = 3;
+  string rule = 4;
+  string output = 5;
+  map<string, string> output_fields = 6;
+  // repeated string tags = 7; // TODO(leodido,fntlnz): tags not supported yet, keeping for reference
+}
