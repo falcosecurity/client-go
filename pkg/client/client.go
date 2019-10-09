@@ -35,6 +35,9 @@ func NewForConfig(config *Config) (*Client, error) {
 		config.CertFile,
 		config.KeyFile,
 	)
+	if err != nil {
+		return nil, fmt.Errorf("error loading the X.509 key pair: %v", err)
+	}
 
 	certPool := x509.NewCertPool()
 	rootCA, err := ioutil.ReadFile(config.CARootFile)
