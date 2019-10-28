@@ -3,8 +3,8 @@ SHELL := /bin/bash
 PROTOC ?= $(shell which protoc)
 
 PROTOS := pkg/api/schema/schema.proto pkg/api/output/output.proto
-PROTO_URLS := https://raw.githubusercontent.com/falcosecurity/falco/feat/grpc-server-poc/userspace/falco/schema.proto https://raw.githubusercontent.com/falcosecurity/falco/feat/grpc-server-poc/userspace/falco/output.proto
-PROTO_SHAS := 68a2bcf9c63c62b9cb1d6f8dff165f591241e09edaf034cf532513fa68809686 155f8376902ce6e792daa9574bce84c2b3863b6aa7c2b4a4c2261365b51de2e6
+PROTO_URLS := https://raw.githubusercontent.com/falcosecurity/falco/dev/userspace/falco/schema.proto https://raw.githubusercontent.com/falcosecurity/falco/dev/userspace/falco/output.proto
+PROTO_SHAS := a1f427c114b945d0880b55058862b74015d036aa722985ca6e5474ab4ed19f69 283a717cf891edb3247f0afe640dc625c421cee31a66c1763873c9f32352dee0
 
 PROTO_DIRS := $(dir ${PROTOS})
 PROTO_DIRS_INCLUDES := $(patsubst %/, -I %, ${PROTO_DIRS})
