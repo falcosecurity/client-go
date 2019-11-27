@@ -9,6 +9,9 @@ PROTO_SHAS := a1f427c114b945d0880b55058862b74015d036aa722985ca6e5474ab4ed19f69 2
 PROTO_DIRS := $(dir ${PROTOS})
 PROTO_DIRS_INCLUDES := $(patsubst %/, -I %, ${PROTO_DIRS})
 
+.PHONY: protos
+protos: ${PROTOS}
+
 # $(1): the proto path
 # $(2): the proto URL
 # $(3): the proto SHA256
@@ -25,9 +28,6 @@ $(foreach PROTO,$(PROTOS),\
 	$(eval PROTO_URLS := $(wordlist 2,$(words $(PROTO_URLS)),$(PROTO_URLS)))\
 	$(eval PROTO_SHAS := $(wordlist 2,$(words $(PROTO_SHAS)),$(PROTO_SHAS)))\
 )
-
-.PHONY: protos
-protos: ${PROTOS}
 
 .PHONY: clean
 clean: ${PROTO_DIRS}
