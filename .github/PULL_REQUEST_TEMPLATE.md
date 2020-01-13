@@ -1,9 +1,12 @@
-<!--  Thanks for sending a pull request!  Here are some tips for you:
+<!--
+Thanks for sending a pull request!
 
-1. If this is your first time, please read our contributor guidelines in the [CONTRIBUTING.md](https://github.com/falcosecurity/falco/blob/dev/CONTRIBUTING.md) file in the Falco repository.
+Here are some tips for you:
+
+1. If this is your first time, please read our contributor guidelines in the [CONTRIBUTING.md](https://github.com/falcosecurity/.github/blob/master/CONTRIBUTING.md) file.
 2. Please label this pull request according to what type of issue you are addressing.
-3. Please add a release note!
-4. If the PR is unfinished while opening it specify a wip in the title before the actual title, for example, "wip: my awesome feature"
+3. Please add a release note in case it is needed!
+4. If the PR is unfinished while opening it specify a wip in the title before the actual title, for example "wip: my awesome feature"
 -->
 
 **What type of PR is this?**
@@ -21,8 +24,6 @@
 > /kind failing-test
 
 > /kind feature
-
-> /kind flaky-test
 
 **Any specific area of the project related to this PR?**
 
@@ -43,7 +44,7 @@
 <!--
 Automatically closes linked issue when PR is merged.
 Usage: `Fixes #<issue number>`, or `Fixes (paste link of issue)`.
-If PR is `kind/failing-tests` or `kind/flaky-test`, please post the related issues/tests in a comment and do not use `Fixes`.
+If PR is `kind/failing-tests` please post the related issues/tests in a comment and do not use `Fixes`.
 -->
 
 Fixes #
