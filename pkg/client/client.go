@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 
 	"github.com/falcosecurity/client-go/pkg/api/output"
+	"github.com/falcosecurity/client-go/pkg/api/version"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
@@ -68,12 +69,21 @@ func NewForConfig(config *Config) (*Client, error) {
 }
 
 // Output is the client for Falco Outputs.
-// When using it you can use `subscribe()` to receive a stream of falco output events.
+// When using it you can use `subscribe()` to receive a stream of Falco output events.
 func (c *Client) Output() (output.ServiceClient, error) {
 	if err := c.checkConn(); err != nil {
 		return nil, err
 	}
 	return output.NewServiceClient(c.conn), nil
+}
+
+// Version it the client for Falco Version API.
+// When using it you can use `version()` to receive the Falco version.
+func (c *Client) Version() (version.ServiceClient, error) {
+	if err := c.checkConn(); err != nil {
+		return nil, err
+	}
+	return version.NewServiceClient(c.conn), nil
 }
 
 // Close the connection to the falco gRPC server.
