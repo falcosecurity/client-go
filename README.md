@@ -13,7 +13,6 @@ go get -u github.com/falcosecurity/client-go
 
 ### Client creation
 
-
 ```go
 package main
 
@@ -24,16 +23,15 @@ imports(
 func main() {
     c, err := client.NewForConfig(&client.Config{
         Hostname:   "localhost",
-		Port:       5060,
-		CertFile:   "/tmp/client.crt",
-		KeyFile:    "/tmp/client.key",
-		CARootFile: "/tmp/ca.crt",
+        Port:       5060,
+        CertFile:   "/tmp/client.crt",
+        KeyFile:    "/tmp/client.key",
+        CARootFile: "/tmp/ca.crt",
     })
 }
 ```
 
-
-### Falco outputs subscribe
+### Falco outputs API
 
 ```go
 outputClient, err := c.Output()
@@ -61,10 +59,38 @@ for {
 }
 ```
 
+### Falco version API
+
+```go
+// Set up a connection to the server.
+c, err := client.NewForConfig(&client.Config{
+    Hostname:   "localhost",
+    Port:       5060,
+    CertFile:   "/tmp/client.crt",
+    KeyFile:    "/tmp/client.key",
+    CARootFile: "/tmp/ca.crt",
+})
+if err != nil {
+    log.Fatalf("unable to create a Falco client: %v", err)
+}
+defer c.Close()
+versionClient, err := c.Version()
+if err != nil {
+    log.Fatalf("unable to obtain a version client: %v", err)
+}
+
+ctx := context.Background()
+res, err := versionClient.Version(ctx, &version.Request{})
+if err != nil {
+    log.Fatalf("error obtaining the Falco version: %v", err)
+}
+fmt.Printf("%v\n", res)
+```
+
 ## Full Examples
 
 - [Output events example](examples/output/main.go)
-
+- [Version example](examples/version/main.go)
 
 ## Update protos
 
