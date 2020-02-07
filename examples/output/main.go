@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 
 	"github.com/falcosecurity/client-go/pkg/api/output"
 	"github.com/falcosecurity/client-go/pkg/client"
+	"github.com/gogo/protobuf/jsonpb"
 )
 
 func main() {
@@ -45,10 +45,10 @@ func main() {
 		if err != nil {
 			log.Fatalf("error closing stream after EOF: %v", err)
 		}
-		out, err := json.Marshal(res)
+		out, err := (&jsonpb.Marshaler{}).MarshalToString(res)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(string(out))
+		fmt.Println(out)
 	}
 }
