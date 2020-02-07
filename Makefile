@@ -3,7 +3,7 @@ SHELL := /bin/bash
 PROTOC ?= $(shell which protoc)
 
 PROTOS := pkg/api/schema/schema.proto pkg/api/output/output.proto pkg/api/version/version.proto
-PROTO_URLS := https://raw.githubusercontent.com/falcosecurity/falco/dev/userspace/falco/schema.proto https://raw.githubusercontent.com/falcosecurity/falco/dev/userspace/falco/output.proto https://raw.githubusercontent.com/falcosecurity/falco/e1a753f792b93903fff9bdaaf02b336f672cb8c7/userspace/falco/version.proto
+PROTO_URLS := https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/schema.proto https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/output.proto https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/version.proto
 PROTO_SHAS := a1f427c114b945d0880b55058862b74015d036aa722985ca6e5474ab4ed19f69 4ce2f3e6d6ebc07a74535c4f21da73e44c6ef848ab83627b1ac987058be5ece9 0ac29f477e146a14504a34f91509668e44f4ee107d37b0be57e82847e8e89510
 
 PROTO_DIRS := $(dir ${PROTOS})
