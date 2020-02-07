@@ -7,6 +7,7 @@ import (
 
 	"github.com/falcosecurity/client-go/pkg/api/version"
 	"github.com/falcosecurity/client-go/pkg/client"
+	"github.com/gogo/protobuf/jsonpb"
 )
 
 func main() {
@@ -32,5 +33,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("error obtaining the Falco version: %v", err)
 	}
-	fmt.Printf("%v\n", res)
+	out, err := (&jsonpb.Marshaler{}).MarshalToString(res)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(out)
 }
