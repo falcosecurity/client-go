@@ -5,8 +5,11 @@ import (
 	"crypto/x509"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
+	"strconv"
+	"time"
 
-	"github.com/falcosecurity/client-go/pkg/api/output"
+	"github.com/falcosecurity/client-go/pkg/api/outputs"
 	"github.com/falcosecurity/client-go/pkg/api/version"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -32,6 +35,8 @@ const targetFormat = "%s:%d"
 
 // NewForConfig is used to create a new Falco gRPC client.
 func NewForConfig(config *Config) (*Client, error) {
+	rand.Seed(time.Now().UnixNano())
+
 	certificate, err := tls.LoadX509KeyPair(
 		config.CertFile,
 		config.KeyFile,
@@ -68,25 +73,35 @@ func NewForConfig(config *Config) (*Client, error) {
 	}, nil
 }
 
-// Output is the client for Falco Outputs.
-// When using it you can use `subscribe()` to receive a stream of Falco output events.
-func (c *Client) Output() (output.ServiceClient, error) {
+// Outputs is the client for the Falco gRPC Outputs API.
+// When using it you can use `outputs()` to receive a stream of Falco output events.
+func (c *Client) Outputs() (*OutputsClient, error) {
 	if err := c.checkConn(); err != nil {
 		return nil, err
 	}
-	return output.NewServiceClient(c.conn), nil
+	oc := &OutputsClient{
+		c: outputs.NewServiceClient(c.conn),
+		sessionID: strconv.Itoa(rand.Intn(1000) + 1),
+	}
+
+	return oc, nil
 }
 
-// Version it the client for Falco Version API.
+// Version it the client for the Falco gRPC Version API.
 // When using it you can use `version()` to receive the Falco version.
-func (c *Client) Version() (version.ServiceClient, error) {
+func (c *Client) Version() (*VersionClient, error) {
 	if err := c.checkConn(); err != nil {
 		return nil, err
 	}
-	return version.NewServiceClient(c.conn), nil
+	vc := &VersionClient{
+		c:         version.NewServiceClient(c.conn),
+		sessionID: strconv.Itoa(rand.Intn(1000) + 1),
+	}
+
+	return vc, nil
 }
 
-// Close the connection to the falco gRPC server.
+// Close the connection to the Falco gRPC server.
 func (c *Client) Close() error {
 	if err := c.checkConn(); err != nil {
 		return err
