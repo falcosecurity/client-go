@@ -28,8 +28,7 @@ func main() {
 		log.Fatalf("unable to obtain a version client: %v", err)
 	}
 
-	ctx := context.Background()
-	res, err := versionClient.Version(ctx, &version.Request{})
+	res, err := versionClient.Version(context.Background(), &version.Request{})
 	if err != nil {
 		log.Fatalf("error obtaining the Falco version: %v", err)
 	}

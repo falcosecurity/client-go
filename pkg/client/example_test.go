@@ -6,7 +6,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/falcosecurity/client-go/pkg/api/output"
+	"github.com/falcosecurity/client-go/pkg/api/outputs"
 	"github.com/falcosecurity/client-go/pkg/api/version"
 	"github.com/falcosecurity/client-go/pkg/client"
 )
@@ -27,8 +27,8 @@ func ExampleClient() {
 	defer c.Close()
 }
 
-// A client that is created and then used to Subscribe to Falco output events
-func ExampleClient_outputSubscribe() {
+// A client that is created and then used to receive the Falco Outpus API events
+func ExampleClient_outputs() {
 	// Set up a connection to the server.
 	c, err := client.NewForConfig(&client.Config{
 		Hostname:   "localhost",
@@ -41,7 +41,7 @@ func ExampleClient_outputSubscribe() {
 		log.Fatalf("unable to create a Falco client: %v", err)
 	}
 	defer c.Close()
-	outputClient, err := c.Output()
+	outputClient, err := c.Outputs()
 	if err != nil {
 		log.Fatalf("unable to obtain an output client: %v", err)
 	}
@@ -49,7 +49,7 @@ func ExampleClient_outputSubscribe() {
 	ctx := context.Background()
 	// Keepalive true means that the client will wait indefinitely for new events to come
 	// Use keepalive false if you only want to receive the accumulated events and stop
-	fcs, err := outputClient.Subscribe(ctx, &output.Request{Keepalive: true})
+	fcs, err := outputClient.Outputs(ctx, &outputs.Request{Keepalive: true})
 	if err != nil {
 		log.Fatalf("could not subscribe: %v", err)
 	}
@@ -84,10 +84,9 @@ func ExampleClient_version() {
 		log.Fatalf("unable to obtain a version client: %v", err)
 	}
 
-	ctx := context.Background()
-	res, err := versionClient.Version(ctx, &version.Request{})
+	res, err := versionClient.Version(context.Background(), &version.Request{})
 	if err != nil {
 		log.Fatalf("error obtaining the Falco version: %v", err)
 	}
-	fmt.Printf("%v\n", res)
+	fmt.Println(res)
 }

@@ -31,7 +31,7 @@ func main() {
 }
 ```
 
-### Falco outputs API
+### Falco Outputs API
 
 ```go
 outputClient, err := c.Output()
@@ -42,7 +42,7 @@ if err != nil {
 ctx := context.Background()
 // Keepalive true means that the client will wait indefinitely for new events to come
 // Use keepalive false if you only want to receive the accumulated events and stop
-fcs, err := outputClient.Subscribe(ctx, &output.Request{Keepalive: true})
+fcs, err := outputClient.Outputs(ctx, &outputs.Request{Keepalive: true})
 if err != nil {
     log.Fatalf("could not subscribe: %v", err)
 }
@@ -59,7 +59,7 @@ for {
 }
 ```
 
-### Falco version API
+### Falco Version API
 
 ```go
 // Set up a connection to the server.
@@ -79,8 +79,7 @@ if err != nil {
     log.Fatalf("unable to obtain a version client: %v", err)
 }
 
-ctx := context.Background()
-res, err := versionClient.Version(ctx, &version.Request{})
+res, err := versionClient.Version(context.Background(), &version.Request{})
 if err != nil {
     log.Fatalf("error obtaining the Falco version: %v", err)
 }
