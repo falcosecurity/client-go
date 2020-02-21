@@ -16,7 +16,9 @@ import (
 // it allows to connect to a Falco gRPC server.
 // It is created using the function NewForConfig(config *Config) .
 type Client struct {
-	conn *grpc.ClientConn
+	conn                 *grpc.ClientConn
+	versionServiceClient version.ServiceClient
+	outputServiceClient  output.ServiceClient
 }
 
 // Config is the configuration definition for connecting to a Falco gRPC server.
@@ -64,7 +66,7 @@ func NewForConfig(config *Config) (*Client, error) {
 	}
 
 	return &Client{
-		conn,
+		conn: conn,
 	}, nil
 }
 
@@ -74,7 +76,10 @@ func (c *Client) Output() (output.ServiceClient, error) {
 	if err := c.checkConn(); err != nil {
 		return nil, err
 	}
-	return output.NewServiceClient(c.conn), nil
+	if c.outputServiceClient == nil {
+		c.outputServiceClient = output.NewServiceClient(c.conn)
+	}
+	return c.outputServiceClient, nil
 }
 
 // Version it the client for Falco Version API.
@@ -83,7 +88,10 @@ func (c *Client) Version() (version.ServiceClient, error) {
 	if err := c.checkConn(); err != nil {
 		return nil, err
 	}
-	return version.NewServiceClient(c.conn), nil
+	if c.versionServiceClient == nil {
+		c.versionServiceClient = version.NewServiceClient(c.conn)
+	}
+	return c.versionServiceClient, nil
 }
 
 // Close the connection to the falco gRPC server.
