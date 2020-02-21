@@ -32,3 +32,10 @@ $(foreach PROTO,$(PROTOS),\
 .PHONY: clean
 clean: ${PROTO_DIRS}
 	@rm -rf $^
+
+mocks: protos
+	@mkdir -p pkg/api/version/mocks
+	@mockgen "github.com/falcosecurity/client-go/pkg/api/version" ServiceClient > pkg/api/version/mocks/mock_version.go
+
+	@mkdir -p pkg/api/output/mocks
+	@mockgen "github.com/falcosecurity/client-go/pkg/api/output" ServiceClient,Service_SubscribeClient > pkg/api/output/mocks/mock_output.go

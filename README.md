@@ -98,10 +98,19 @@ Perform the following edits to the Makefile:
 
 1. Update the `PROTOS` array with the destination path of the `.proto` file.
 2. Update the `PROTO_URLS` array with the URL from which to download it.
-3. Update thr `PROTO_SHAS` array with the SHA256 sum of the file to download.
+3. Update the `PROTO_SHAS` array with the SHA256 sum of the file to download.
 4. Execute the following commands:
 
 ```console
 make clean
 make protos
+```
+
+## Generate mocks for protos
+
+1. Follow the steps in the `Update protos` section
+2. Execute the following commands:
+
+```console
+make mocks
 ```
