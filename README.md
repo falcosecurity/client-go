@@ -88,8 +88,9 @@ fmt.Printf("%v\n", res)
 
 ## Full Examples
 
-- [Output events example](examples/output/main.go)
+- [Output events example](examples/outputs/main.go)
 - [Version example](examples/version/main.go)
+- [Input signals example](example/inputs/main.go)
 
 ## Update protos
 
