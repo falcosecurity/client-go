@@ -2,12 +2,15 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
 	"github.com/falcosecurity/client-go/pkg/api/version"
 	"github.com/falcosecurity/client-go/pkg/client"
 	"github.com/gogo/protobuf/jsonpb"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 )
 
 func main() {
@@ -28,7 +31,13 @@ func main() {
 		log.Fatalf("unable to obtain a version client: %v", err)
 	}
 
-	res, err := versionClient.Version(context.Background(), &version.Request{})
+	var header, trailer metadata.MD
+	res, err := versionClient.Version(
+		context.Background(),
+		&version.Request{},
+		grpc.Header(&header),
+		grpc.Trailer(&trailer),
+	)
 	if err != nil {
 		log.Fatalf("error obtaining the Falco version: %v", err)
 	}
@@ -37,4 +46,16 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println(out)
+	// Header metadata
+	headerString, err := json.Marshal(header)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(headerString))
+	// Trailer metadata
+	trailerString, err := json.Marshal(trailer)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(trailerString))
 }
