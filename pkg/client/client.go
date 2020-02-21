@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/falcosecurity/client-go/pkg/api/inputs"
 	"github.com/falcosecurity/client-go/pkg/api/outputs"
 	"github.com/falcosecurity/client-go/pkg/api/version"
 	"google.golang.org/grpc"
@@ -73,21 +74,21 @@ func NewForConfig(config *Config) (*Client, error) {
 	}, nil
 }
 
-// Outputs is the client for the Falco gRPC Outputs API.
+// Outputs returns the client for the Falco gRPC Outputs API.
 // When using it you can use `outputs()` to receive a stream of Falco output events.
 func (c *Client) Outputs() (*OutputsClient, error) {
 	if err := c.checkConn(); err != nil {
 		return nil, err
 	}
 	oc := &OutputsClient{
-		c: outputs.NewServiceClient(c.conn),
+		c:         outputs.NewServiceClient(c.conn),
 		sessionID: strconv.Itoa(rand.Intn(1000) + 1),
 	}
 
 	return oc, nil
 }
 
-// Version it the client for the Falco gRPC Version API.
+// Version returns the client for the Falco gRPC Version API.
 // When using it you can use `version()` to receive the Falco version.
 func (c *Client) Version() (*VersionClient, error) {
 	if err := c.checkConn(); err != nil {
@@ -99,6 +100,20 @@ func (c *Client) Version() (*VersionClient, error) {
 	}
 
 	return vc, nil
+}
+
+// Inputs returns the client for the Falco gRPC Inputs API.
+// By using it you can send inputs to Falco in various way.
+func (c *Client) Inputs() (*InputsClient, error) {
+	if err := c.checkConn(); err != nil {
+		return nil, err
+	}
+	ic := &InputsClient{
+		c:         inputs.NewServiceClient(c.conn),
+		sessionID: strconv.Itoa(rand.Intn(1000) + 1),
+	}
+
+	return ic, nil
 }
 
 // Close the connection to the Falco gRPC server.
