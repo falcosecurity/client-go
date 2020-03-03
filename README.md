@@ -24,9 +24,9 @@ func main() {
     c, err := client.NewForConfig(&client.Config{
         Hostname:   "localhost",
         Port:       5060,
-        CertFile:   "/tmp/client.crt",
-        KeyFile:    "/tmp/client.key",
-        CARootFile: "/tmp/ca.crt",
+        CertFile:   "/etc/falco/certs/client.crt",
+        KeyFile:    "/etc/falco/certs/client.key",
+        CARootFile: "/etc/falco/certs/ca.crt",
     })
 }
 ```
@@ -66,9 +66,9 @@ for {
 c, err := client.NewForConfig(&client.Config{
     Hostname:   "localhost",
     Port:       5060,
-    CertFile:   "/tmp/client.crt",
-    KeyFile:    "/tmp/client.key",
-    CARootFile: "/tmp/ca.crt",
+    CertFile:   "/etc/falco/certs/client.crt",
+    KeyFile:    "/etc/falco/certs/client.key",
+    CARootFile: "/etc/falco/certs/ca.crt",
 })
 if err != nil {
     log.Fatalf("unable to create a Falco client: %v", err)
