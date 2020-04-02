@@ -36,7 +36,9 @@ $(foreach PROTO,$(PROTOS),\
 clean: ${PROTO_DIRS}
 	@rm -rf $^
 
+.PHONY: mocks
 mocks: protos
+	@$(GO) install github.com/golang/mock/mockgen
 	@mkdir -p pkg/api/version/mocks
 	@mockgen "github.com/falcosecurity/client-go/pkg/api/version" ServiceClient > pkg/api/version/mocks/mock_version.go
 
@@ -44,6 +46,6 @@ mocks: protos
 	@mockgen "github.com/falcosecurity/client-go/pkg/api/output" ServiceClient,Service_SubscribeClient > pkg/api/output/mocks/mock_output.go
 
 .PHONY: test
-test:
-	$(GO) vet ./...
-	$(GO) test ${TEST_FLAGS} ./...
+test: mocks
+	@$(GO) vet ./...
+	@$(GO) test ${TEST_FLAGS} ./...
