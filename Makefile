@@ -1,6 +1,9 @@
 SHELL := /bin/bash
 
+GO ?= $(shell which go)
 PROTOC ?= $(shell which protoc)
+
+TEST_FLAGS ?= -v -race
 
 PROTOS := pkg/api/schema/schema.proto pkg/api/output/output.proto pkg/api/version/version.proto
 PROTO_URLS := https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/schema.proto https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/output.proto https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/version.proto
@@ -39,3 +42,8 @@ mocks: protos
 
 	@mkdir -p pkg/api/output/mocks
 	@mockgen "github.com/falcosecurity/client-go/pkg/api/output" ServiceClient,Service_SubscribeClient > pkg/api/output/mocks/mock_output.go
+
+.PHONY: test
+test:
+	$(GO) vet ./...
+	$(GO) test ${TEST_FLAGS} ./...
