@@ -1,0 +1,6 @@
+project_name: client-go
+build:
+  skip: true
+release:
+  github:
+  prerelease: auto
