@@ -3,6 +3,8 @@
 
 > Go client and SDK for Falco
 
+Learn more about the gRPC API by reading [the docs](https://falco.org/docs/grpc/).
+
 ## Install
 
 ```bash
@@ -11,7 +13,13 @@ go get -u github.com/falcosecurity/client-go
 
 ## Usage
 
-### Client creation
+### Network Client creation
+
+If you are binding the Falco gRPC server to a network socket
+with mTLS (mutual TLS authentication) you need this one. Please remember that since this is
+enabling mTLS you will need to generate a pair of certificates for this client
+specifically and provide the CA certificate. If you need something simpler,
+go for the unix socket.
 
 ```go
 package main
@@ -27,6 +35,24 @@ func main() {
         CertFile:   "/etc/falco/certs/client.crt",
         KeyFile:    "/etc/falco/certs/client.key",
         CARootFile: "/etc/falco/certs/ca.crt",
+    })
+}
+```
+
+### Unix Socket Client creation
+
+If you are binding the Falco gRPC server to unix socket, this is what you need.
+
+```go
+package main
+
+imports(
+    "github.com/falcosecurity/client-go/pkg/client"
+)
+
+func main() {
+    c, err := client.NewForConfig(&client.Config{
+        UnixSocketPath:   "unix:///var/run/falco.sock",
     })
 }
 ```
