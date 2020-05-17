@@ -23,17 +23,36 @@ type Client struct {
 
 // Config is the configuration definition for connecting to a Falco gRPC server.
 type Config struct {
-	Hostname   string
-	Port       uint16
-	CertFile   string
-	KeyFile    string
-	CARootFile string
+	Hostname       string
+	Port           uint16
+	CertFile       string
+	KeyFile        string
+	CARootFile     string
+	UnixSocketPath string
 }
 
 const targetFormat = "%s:%d"
 
 // NewForConfig is used to create a new Falco gRPC client.
 func NewForConfig(config *Config) (*Client, error) {
+	if len(config.UnixSocketPath) > 0 {
+		return newUnixSocketClient(config)
+	}
+	return newNetworkClient(config)
+}
+
+func newUnixSocketClient(config *Config) (*Client, error) {
+	dialOption := grpc.WithInsecure()
+	conn, err := grpc.Dial("unix:///var/run/falco.sock", dialOption)
+	if err != nil {
+		return nil, fmt.Errorf("error dialing server: %v", err)
+	}
+	return &Client{
+		conn: conn,
+	}, nil
+}
+
+func newNetworkClient(config *Config) (*Client, error) {
 	certificate, err := tls.LoadX509KeyPair(
 		config.CertFile,
 		config.KeyFile,
