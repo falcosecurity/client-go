@@ -43,7 +43,7 @@ func NewForConfig(config *Config) (*Client, error) {
 
 func newUnixSocketClient(config *Config) (*Client, error) {
 	dialOption := grpc.WithInsecure()
-	conn, err := grpc.Dial("unix:///var/run/falco.sock", dialOption)
+	conn, err := grpc.Dial(config.UnixSocketPath, dialOption)
 	if err != nil {
 		return nil, fmt.Errorf("error dialing server: %v", err)
 	}
