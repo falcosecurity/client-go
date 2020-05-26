@@ -25,11 +25,12 @@ go for the unix socket.
 package main
 
 imports(
+    "context"
     "github.com/falcosecurity/client-go/pkg/client"
 )
 
 func main() {
-    c, err := client.NewForConfig(&client.Config{
+    c, err := client.NewForConfig(context.Background(), &client.Config{
         Hostname:   "localhost",
         Port:       5060,
         CertFile:   "/etc/falco/certs/client.crt",
@@ -47,11 +48,12 @@ If you are binding the Falco gRPC server to unix socket, this is what you need.
 package main
 
 imports(
+    "context"
     "github.com/falcosecurity/client-go/pkg/client"
 )
 
 func main() {
-    c, err := client.NewForConfig(&client.Config{
+    c, err := client.NewForConfig(context.Background(), &client.Config{
         UnixSocketPath:   "unix:///var/run/falco.sock",
     })
 }
@@ -89,7 +91,7 @@ for {
 
 ```go
 // Set up a connection to the server.
-c, err := client.NewForConfig(&client.Config{
+c, err := client.NewForConfig(context.Background(), &client.Config{
     Hostname:   "localhost",
     Port:       5060,
     CertFile:   "/etc/falco/certs/client.crt",
