@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// Set up a connection to the server.
-	c, err := client.NewForConfig(&client.Config{
+	c, err := client.NewForConfig(context.Background(), &client.Config{
 		Hostname:   "localhost",
 		Port:       5060,
 		CertFile:   "/etc/falco/certs/client.crt",
