@@ -14,7 +14,7 @@ import (
 // The simplest use of a Client, just create and Close it.
 func ExampleClient() {
 	//Set up a connection to the server.
-	c, err := client.NewForConfig(&client.Config{
+	c, err := client.NewForConfig(context.Background(), &client.Config{
 		Hostname:   "localhost",
 		Port:       5060,
 		CertFile:   "/etc/falco/certs/client.crt",
@@ -30,7 +30,7 @@ func ExampleClient() {
 // A client that is created and then used to Subscribe to Falco output events
 func ExampleClient_outputSubscribe() {
 	// Set up a connection to the server.
-	c, err := client.NewForConfig(&client.Config{
+	c, err := client.NewForConfig(context.Background(), &client.Config{
 		Hostname:   "localhost",
 		Port:       5060,
 		CertFile:   "/etc/falco/certs/client.crt",
@@ -68,7 +68,7 @@ func ExampleClient_outputSubscribe() {
 
 func ExampleClient_version() {
 	// Set up a connection to the server.
-	c, err := client.NewForConfig(&client.Config{
+	c, err := client.NewForConfig(context.Background(), &client.Config{
 		Hostname:   "localhost",
 		Port:       5060,
 		CertFile:   "/etc/falco/certs/client.crt",

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
@@ -29,21 +30,22 @@ type Config struct {
 	KeyFile        string
 	CARootFile     string
 	UnixSocketPath string
+	DialOptions    []grpc.DialOption
 }
 
 const targetFormat = "%s:%d"
 
 // NewForConfig is used to create a new Falco gRPC client.
-func NewForConfig(config *Config) (*Client, error) {
+func NewForConfig(ctx context.Context, config *Config) (*Client, error) {
 	if len(config.UnixSocketPath) > 0 {
-		return newUnixSocketClient(config)
+		return newUnixSocketClient(ctx, config)
 	}
-	return newNetworkClient(config)
+	return newNetworkClient(ctx, config)
 }
 
-func newUnixSocketClient(config *Config) (*Client, error) {
-	dialOption := grpc.WithInsecure()
-	conn, err := grpc.Dial(config.UnixSocketPath, dialOption)
+func newUnixSocketClient(ctx context.Context, config *Config) (*Client, error) {
+	dialOptions := append(config.DialOptions, grpc.WithInsecure())
+	conn, err := grpc.DialContext(ctx, config.UnixSocketPath, dialOptions...)
 	if err != nil {
 		return nil, fmt.Errorf("error dialing server: %v", err)
 	}
@@ -52,7 +54,7 @@ func newUnixSocketClient(config *Config) (*Client, error) {
 	}, nil
 }
 
-func newNetworkClient(config *Config) (*Client, error) {
+func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {
 	certificate, err := tls.LoadX509KeyPair(
 		config.CertFile,
 		config.KeyFile,
@@ -78,8 +80,8 @@ func newNetworkClient(config *Config) (*Client, error) {
 		RootCAs:      certPool,
 	})
 
-	dialOption := grpc.WithTransportCredentials(transportCreds)
-	conn, err := grpc.Dial(fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOption)
+	dialOptions := append(config.DialOptions, grpc.WithTransportCredentials(transportCreds))
+	conn, err := grpc.DialContext(ctx, fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOptions...)
 	if err != nil {
 		return nil, fmt.Errorf("error dialing server: %v", err)
 	}
