@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"time"
 
 	"github.com/falcosecurity/client-go/pkg/api/output"
 	"github.com/falcosecurity/client-go/pkg/client"
@@ -13,7 +14,7 @@ import (
 
 func main() {
 	//Set up a connection to the server.
-	c, err := client.NewForConfig(context.Background(), &client.Config{
+	c, err := client.NewForConfig(&client.Config{
 		UnixSocketPath: "unix:///var/run/falco.sock",
 	})
 	if err != nil {
@@ -28,11 +29,17 @@ func main() {
 	ctx := context.Background()
 	// Keepalive true means that the client will wait indefinitely for new events to come
 	// Use keepalive false if you only want to receive the accumulated events and stop
-	fcs, err := outputClient.Get(ctx, &output.Request{Keepalive: true})
+	fcs, err := outputClient.Sub(ctx)
 	if err != nil {
 		log.Fatalf("could not subscribe: %v", err)
 	}
 
+	go func() {
+		for {
+			fcs.Send(&output.Request{})
+			time.Sleep(time.Second * 5)
+		}
+	}()
 	for {
 		res, err := fcs.Recv()
 		if err == io.EOF {
