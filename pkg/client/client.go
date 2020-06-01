@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/falcosecurity/client-go/pkg/api/output"
+	"github.com/falcosecurity/client-go/pkg/api/outputs"
 	"github.com/falcosecurity/client-go/pkg/api/version"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -15,11 +15,11 @@ import (
 
 // Client is a wrapper for the gRPC connection
 // it allows to connect to a Falco gRPC server.
-// It is created using the function NewForConfig(config *Config) .
+// It is created using the function `NewForConfig(context.Context, *Config)`.
 type Client struct {
 	conn                 *grpc.ClientConn
 	versionServiceClient version.ServiceClient
-	outputServiceClient  output.ServiceClient
+	outputsServiceClient outputs.ServiceClient
 }
 
 // Config is the configuration definition for connecting to a Falco gRPC server.
@@ -91,16 +91,16 @@ func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {
 	}, nil
 }
 
-// Output is the client for Falco Outputs.
-// When using it you can use `subscribe()` to receive a stream of Falco output events.
-func (c *Client) Output() (output.ServiceClient, error) {
+// Outputs is the client for Falco Outputs.
+// When using it you can use `Sub()` or `Get()` to receive a stream of Falco output events.
+func (c *Client) Outputs() (outputs.ServiceClient, error) {
 	if err := c.checkConn(); err != nil {
 		return nil, err
 	}
-	if c.outputServiceClient == nil {
-		c.outputServiceClient = output.NewServiceClient(c.conn)
+	if c.outputsServiceClient == nil {
+		c.outputsServiceClient = outputs.NewServiceClient(c.conn)
 	}
-	return c.outputServiceClient, nil
+	return c.outputsServiceClient, nil
 }
 
 // Version it the client for Falco Version API.

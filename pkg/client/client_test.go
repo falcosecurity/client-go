@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/falcosecurity/client-go/pkg/api/output"
+	"github.com/falcosecurity/client-go/pkg/api/outputs"
+	outputsmock "github.com/falcosecurity/client-go/pkg/api/outputs/mocks"
 	"github.com/falcosecurity/client-go/pkg/api/version"
-	outputmock "github.com/falcosecurity/client-go/pkg/api/output/mocks"
 	versionmock "github.com/falcosecurity/client-go/pkg/api/version/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -35,27 +35,27 @@ func TestClient_Version(t *testing.T) {
 	assert.Equal(t, res.Version, "mockVersion", "version does not match mockVersion")
 }
 
-func TestClient_Output(t *testing.T) {
+func TestClient_Outputs(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
-	streamStub := outputmock.NewMockService_SubscribeClient(ctrl)
-	streamStub.EXPECT().Recv().Return(&output.Response{Rule: "testRule", Output: "testOutput"}, nil)
+	streamStub := outputsmock.NewMockService_GetClient(ctrl)
+	streamStub.EXPECT().Recv().Return(&outputs.Response{Rule: "testRule", Output: "testOutput"}, nil)
 
-	mockOutputClient := outputmock.NewMockServiceClient(ctrl)
-	mockOutputClient.EXPECT().Subscribe(
+	mockOutputClient := outputsmock.NewMockServiceClient(ctrl)
+	mockOutputClient.EXPECT().Get(
 		gomock.Any(),
 		gomock.Any(),
 	).Return(streamStub, nil)
 
 	c := Client{
-		conn:                &grpc.ClientConn{},
-		outputServiceClient: mockOutputClient,
+		conn:                 &grpc.ClientConn{},
+		outputsServiceClient: mockOutputClient,
 	}
 
-	outputServiceClient, err := c.Output()
+	outputsServiceClient, err := c.Outputs()
 	assert.Nil(t, err)
 
-	stream, err := outputServiceClient.Subscribe(context.Background(), &output.Request{})
+	stream, err := outputsServiceClient.Get(context.Background(), &outputs.Request{})
 	assert.Nil(t, err)
 	res, err := stream.Recv()
 	assert.Nil(t, err)
