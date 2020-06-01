@@ -2,6 +2,12 @@ SHELL := /bin/bash
 
 GO ?= $(shell which go)
 PROTOC ?= $(shell which protoc)
+MOCKGEN ?= $(shell which mockgen)
+
+ifeq ($(MOCKGEN),)
+# keep this in sync with the version of github.com/golang/mock in go.mod
+$(shell $(GO) get github.com/golang/mock/mockgen@v1.4.3) 
+endif
 
 TEST_FLAGS ?= -v -race
 
@@ -44,7 +50,7 @@ MOCK_SYMBOLS := ServiceClient,Service_GetClient,Service_SubClient ServiceClient
 define generate_mock
 $(2)/$(3): $(1) protos
 	@mkdir -p $(2)
-	mockgen $(shell cat $(1) | sed -n -e 's/^option go_package = "\(.*\)";/\1/p') $(4) > $(2)/$(3)
+	$(MOCKGEN) $(shell cat $(1) | sed -n -e 's/^option go_package = "\(.*\)";/\1/p') $(4) > $(2)/$(3)
 endef
 $(foreach PROTO,$(MOCK_PROTOS),\
 	$(eval $(call generate_mock,$(PROTO),$(dir $(PROTO))mocks,$(patsubst %.proto,%.go,$(notdir $(PROTO))),$(firstword $(MOCK_SYMBOLS))))\
@@ -54,7 +60,7 @@ $(foreach PROTO,$(MOCK_PROTOS),\
 MOCKS := $(join $(dir ${MOCK_PROTOS}),$(patsubst %.proto,mocks/%.go,$(notdir ${MOCK_PROTOS})))
 
 .PHONY: mocks
-mocks: ${MOCKS}
+mocks: protos ${MOCKS}
 
 .PHONY: test
 test: mocks
