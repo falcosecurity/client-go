@@ -5,12 +5,14 @@ PROTOC ?= $(shell which protoc)
 
 TEST_FLAGS ?= -v -race
 
-PROTOS := pkg/api/schema/schema.proto pkg/api/output/output.proto pkg/api/version/version.proto
-PROTO_URLS := https://raw.githubusercontent.com/falcosecurity/falco/feat/bidi-grpc-outputs/userspace/falco/schema.proto https://raw.githubusercontent.com/falcosecurity/falco/feat/bidi-grpc-outputs/userspace/falco/output.proto https://raw.githubusercontent.com/falcosecurity/falco/feat/bidi-grpc-outputs/userspace/falco/version.proto
-PROTO_SHAS := a1f427c114b945d0880b55058862b74015d036aa722985ca6e5474ab4ed19f69 bee86c0b6f9ff11e4c0617f30b60bf8983989888480328c14a41644ea151799f 0ac29f477e146a14504a34f91509668e44f4ee107d37b0be57e82847e8e89510
+PROTOS := pkg/api/schema/schema.proto pkg/api/outputs/outputs.proto pkg/api/version/version.proto
+PROTO_URLS := https://raw.githubusercontent.com/falcosecurity/falco/feat/bidi-grpc-outputs/userspace/falco/schema.proto https://raw.githubusercontent.com/falcosecurity/falco/feat/bidi-grpc-outputs/userspace/falco/outputs.proto https://raw.githubusercontent.com/falcosecurity/falco/feat/bidi-grpc-outputs/userspace/falco/version.proto
+PROTO_SHAS := 1adf7fbb2b92793a3cf490204314af7788ffd81655c4cedb40587a22db9c1915 5e3bdc564c4d38f7d70a8fe50e6022a733ed93197edff6b824a24c6a45fed6c3 fc470546c00273bafe20b53ab6b7e0784206b8f6f9a705df92994e89035a5dc4
 
 PROTO_DIRS := $(dir ${PROTOS})
 PROTO_DIRS_INCLUDES := $(patsubst %/, -I %, ${PROTO_DIRS})
+
+all: protos mocks
 
 .PHONY: protos
 protos: ${PROTOS}
@@ -32,20 +34,33 @@ $(foreach PROTO,$(PROTOS),\
 	$(eval PROTO_SHAS := $(wordlist 2,$(words $(PROTO_SHAS)),$(PROTO_SHAS)))\
 )
 
-.PHONY: clean
-clean: ${PROTO_DIRS}
-	@rm -rf $^
+MOCK_PROTOS := pkg/api/outputs/outputs.proto pkg/api/version/version.proto
+MOCK_SYMBOLS := ServiceClient,Service_GetClient,Service_SubClient ServiceClient
+
+# $(1): the proto path
+# $(2): the mock directory
+# $(3): the mock filename
+# $(4): the symbols to mock
+define generate_mock
+$(2)/$(3): $(1) protos
+	@mkdir -p $(2)
+	mockgen $(shell cat $(1) | sed -n -e 's/^option go_package = "\(.*\)";/\1/p') $(4) > $(2)/$(3)
+endef
+$(foreach PROTO,$(MOCK_PROTOS),\
+	$(eval $(call generate_mock,$(PROTO),$(dir $(PROTO))mocks,$(patsubst %.proto,%.go,$(notdir $(PROTO))),$(firstword $(MOCK_SYMBOLS))))\
+	$(eval MOCK_SYMBOLS := $(wordlist 2,$(words $(MOCK_SYMBOLS)),$(MOCK_SYMBOLS)))\
+)
+
+MOCKS := $(join $(dir ${MOCK_PROTOS}),$(patsubst %.proto,mocks/%.go,$(notdir ${MOCK_PROTOS})))
 
 .PHONY: mocks
-mocks: protos
-	@$(GO) install github.com/golang/mock/mockgen
-	@mkdir -p pkg/api/version/mocks
-	@mockgen "github.com/falcosecurity/client-go/pkg/api/version" ServiceClient > pkg/api/version/mocks/mock_version.go
-
-	@mkdir -p pkg/api/output/mocks
-	@mockgen "github.com/falcosecurity/client-go/pkg/api/output" ServiceClient,Service_SubscribeClient > pkg/api/output/mocks/mock_output.go
+mocks: ${MOCKS}
 
 .PHONY: test
 test: mocks
 	@$(GO) vet ./...
 	@$(GO) test ${TEST_FLAGS} ./...
+
+.PHONY: clean
+clean: ${PROTO_DIRS}
+	@rm -rf $^
