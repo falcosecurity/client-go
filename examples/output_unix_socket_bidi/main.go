@@ -7,21 +7,21 @@ import (
 	"log"
 	"time"
 
-	"github.com/falcosecurity/client-go/pkg/api/output"
+	"github.com/falcosecurity/client-go/pkg/api/outputs"
 	"github.com/falcosecurity/client-go/pkg/client"
 	"github.com/gogo/protobuf/jsonpb"
 )
 
 func main() {
 	//Set up a connection to the server.
-	c, err := client.NewForConfig(&client.Config{
+	c, err := client.NewForConfig(context.Background(), &client.Config{
 		UnixSocketPath: "unix:///var/run/falco.sock",
 	})
 	if err != nil {
 		log.Fatalf("unable to connect: %v", err)
 	}
 	defer c.Close()
-	outputClient, err := c.Output()
+	outputsClient, err := c.Outputs()
 	if err != nil {
 		log.Fatalf("unable to obtain an output client: %v", err)
 	}
@@ -29,14 +29,14 @@ func main() {
 	ctx := context.Background()
 	// Keepalive true means that the client will wait indefinitely for new events to come
 	// Use keepalive false if you only want to receive the accumulated events and stop
-	fcs, err := outputClient.Sub(ctx)
+	fcs, err := outputsClient.Sub(ctx)
 	if err != nil {
 		log.Fatalf("could not subscribe: %v", err)
 	}
 
 	go func() {
 		for {
-			fcs.Send(&output.Request{})
+			fcs.Send(&outputs.Request{})
 			time.Sleep(time.Second * 5)
 		}
 	}()
