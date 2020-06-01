@@ -27,8 +27,6 @@ func main() {
 	}
 
 	ctx := context.Background()
-	// Keepalive true means that the client will wait indefinitely for new events to come
-	// Use keepalive false if you only want to receive the accumulated events and stop
 	fcs, err := outputsClient.Sub(ctx)
 	if err != nil {
 		log.Fatalf("could not subscribe: %v", err)

@@ -62,15 +62,13 @@ func main() {
 ### Falco outputs API
 
 ```go
-outputClient, err := c.Output()
+outputsClient, err := c.Outputs()
 if err != nil {
     log.Fatalf("unable to obtain an output client: %v", err)
 }
 
 ctx := context.Background()
-// Keepalive true means that the client will wait indefinitely for new events to come
-// Use keepalive false if you only want to receive the accumulated events and stop
-fcs, err := outputClient.Subscribe(ctx, &output.Request{Keepalive: true})
+fcs, err := outputsClient.Get(ctx, &outputs.Request{})
 if err != nil {
     log.Fatalf("could not subscribe: %v", err)
 }
@@ -117,8 +115,12 @@ fmt.Printf("%v\n", res)
 
 ## Full Examples
 
-- [Output events example](examples/output/main.go)
-- [Version example](examples/version/main.go)
+- [Outputs events over mTLS example](examples/output/main.go)
+- [Outputs events over Unix socket example](examples/output_unix_socket/main.go)
+- [Outputs events over mTLS bidirectional example](examples/output_bidi/main.go)
+- [Outputs events over Unix socket bidirectional example](examples/output_unix_socket_bidi/main.go)
+- [Version over mTLS example](examples/version/main.go)
+- [Version over Unix socket example](examples/version_unix_socket/main.go)
 
 ## Update protos
 
