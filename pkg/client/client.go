@@ -5,7 +5,9 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"time"
 
 	"github.com/falcosecurity/client-go/pkg/api/outputs"
 	"github.com/falcosecurity/client-go/pkg/api/version"
@@ -101,6 +103,59 @@ func (c *Client) Outputs() (outputs.ServiceClient, error) {
 		c.outputsServiceClient = outputs.NewServiceClient(c.conn)
 	}
 	return c.outputsServiceClient, nil
+}
+
+// OutputsWatchCallback is passed to OutputsWatch to perform an
+// action for each *outputs.Response while retrieving a stream outputs
+type OutputsWatchCallback func(res *outputs.Response) error
+
+// OutputsWatch allows to watch and process a stream of *outputs.Response
+// using a callback function of type OutputsWatchCallback.
+//
+// The timeout parameter specifies the frequency of the watch operation.
+func (c *Client) OutputsWatch(ctx context.Context,
+	cb OutputsWatchCallback,
+	timeout time.Duration,
+	opts ...grpc.CallOption) error {
+	oc, err := c.Outputs()
+	if err != nil {
+		return err
+	}
+	fcs, err := oc.Sub(ctx, opts...)
+	if err != nil {
+		return err
+	}
+	resCh := make(chan *outputs.Response, 1)
+	errCh := make(chan error, 1)
+
+	go func() {
+		for {
+			res, err := fcs.Recv()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				errCh <- fmt.Errorf("error closing stream after EOF: %v", err)
+			}
+			resCh <- res
+		}
+	}()
+
+	for {
+		select {
+		case res := <-resCh:
+			err := cb(res)
+			if err != nil {
+				return err
+			}
+		case err := <-errCh:
+			return err
+		case <-time.After(timeout):
+			fcs.Send(&outputs.Request{})
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+	}
 }
 
 // Version it the client for Falco Version API.
