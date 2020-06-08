@@ -131,11 +131,9 @@ func (c *Client) OutputsWatch(ctx context.Context,
 	go func() {
 		for {
 			res, err := fcs.Recv()
-			if err == io.EOF {
-				break
-			}
 			if err != nil {
-				errCh <- fmt.Errorf("error closing stream after EOF: %v", err)
+				errCh <- err
+				return
 			}
 			resCh <- res
 		}
@@ -149,6 +147,9 @@ func (c *Client) OutputsWatch(ctx context.Context,
 				return err
 			}
 		case err := <-errCh:
+			if err == io.EOF {
+				return nil
+			}
 			return err
 		case <-time.After(timeout):
 			fcs.Send(&outputs.Request{})
