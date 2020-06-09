@@ -113,18 +113,11 @@ type OutputsWatchCallback func(res *outputs.Response) error
 // using a callback function of type OutputsWatchCallback.
 //
 // The timeout parameter specifies the frequency of the watch operation.
-func (c *Client) OutputsWatch(ctx context.Context,
+func OutputsWatch(ctx context.Context,
+	fcs outputs.Service_SubClient,
 	cb OutputsWatchCallback,
-	timeout time.Duration,
-	opts ...grpc.CallOption) error {
-	oc, err := c.Outputs()
-	if err != nil {
-		return err
-	}
-	fcs, err := oc.Sub(ctx, opts...)
-	if err != nil {
-		return err
-	}
+	timeout time.Duration) error {
+
 	resCh := make(chan *outputs.Response, 1)
 	errCh := make(chan error, 1)
 
@@ -157,6 +150,26 @@ func (c *Client) OutputsWatch(ctx context.Context,
 			return ctx.Err()
 		}
 	}
+}
+
+// OutputsWatch subscribes to a stream of Falco outputs
+// and allows to watch and process a stream of *outputs.Response
+// using a callback function of type OutputsWatchCallback.
+//
+// The timeout parameter specifies the frequency of the watch operation.
+func (c *Client) OutputsWatch(ctx context.Context,
+	cb OutputsWatchCallback,
+	timeout time.Duration,
+	opts ...grpc.CallOption) error {
+	oc, err := c.Outputs()
+	if err != nil {
+		return err
+	}
+	fcs, err := oc.Sub(ctx, opts...)
+	if err != nil {
+		return err
+	}
+	return OutputsWatch(ctx, fcs, cb, timeout)
 }
 
 // Version it the client for Falco Version API.
