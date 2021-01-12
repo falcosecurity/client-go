@@ -13,7 +13,7 @@ TEST_FLAGS ?= -v -race
 
 PROTOS := pkg/api/schema/schema.proto pkg/api/outputs/outputs.proto pkg/api/version/version.proto
 PROTO_URLS := https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/schema.proto https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/outputs.proto https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/version.proto
-PROTO_SHAS := 1adf7fbb2b92793a3cf490204314af7788ffd81655c4cedb40587a22db9c1915 5e3bdc564c4d38f7d70a8fe50e6022a733ed93197edff6b824a24c6a45fed6c3 fc470546c00273bafe20b53ab6b7e0784206b8f6f9a705df92994e89035a5dc4
+PROTO_SHAS := ad4e9d62717e82b9fb9ec30625d392fd66ced3e53eb73faea739c63063650ac3 5e3bdc564c4d38f7d70a8fe50e6022a733ed93197edff6b824a24c6a45fed6c3 c57a8a3f37a14ca8f33ce6d26156c9348e716029bca87bf9143807a68b1f31f5
 
 PROTO_DIRS := $(dir ${PROTOS})
 PROTO_DIRS_INCLUDES := $(patsubst %/, -I %, ${PROTO_DIRS})
