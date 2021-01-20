@@ -63,7 +63,7 @@ MOCKS := $(join $(dir ${MOCK_PROTOS}),$(patsubst %.proto,mocks/%.go,$(notdir ${M
 mocks: protos ${MOCKS}
 
 .PHONY: test
-test: mocks
+test:
 	@$(GO) vet ./...
 	@$(GO) test ${TEST_FLAGS} ./...
 
