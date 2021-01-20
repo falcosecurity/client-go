@@ -22,9 +22,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Protos
-          command: make protos
-      - run:
           name: Test
           command: make test
   release:
