@@ -2,7 +2,7 @@
 
 When we release we do the following process:
 
-1. We decide together (usually in the #falco channel in [slack](https://sysdig.slack.com)) what's the [next version](#About-versioning) to tag
+1. We decide together (usually in the #falco channel in [slack](https://kubernetes.slack.com/messages/falco)) what's the [next version](#About-versioning) to tag
 2. A person with repository rights does the tag
 3. The same person runs commands in their machine following the "Release commands" section below
 4. The tag is live on [Github](https://github.com/falcosecurity/client-go/releases) with the changelog attached
