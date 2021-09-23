@@ -22,11 +22,7 @@
 package version
 
 import (
-	context "context"
 	proto "github.com/golang/protobuf/proto"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -299,84 +295,4 @@ func file_version_proto_init() {
 	file_version_proto_rawDesc = nil
 	file_version_proto_goTypes = nil
 	file_version_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// ServiceClient is the client API for Service service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ServiceClient interface {
-	Version(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
-}
-
-type serviceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
-	return &serviceClient{cc}
-}
-
-func (c *serviceClient) Version(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := c.cc.Invoke(ctx, "/falco.version.service/version", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// ServiceServer is the server API for Service service.
-type ServiceServer interface {
-	Version(context.Context, *Request) (*Response, error)
-}
-
-// UnimplementedServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedServiceServer struct {
-}
-
-func (*UnimplementedServiceServer) Version(context.Context, *Request) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
-}
-
-func RegisterServiceServer(s *grpc.Server, srv ServiceServer) {
-	s.RegisterService(&_Service_serviceDesc, srv)
-}
-
-func _Service_Version_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).Version(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/falco.version.service/Version",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).Version(ctx, req.(*Request))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _Service_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "falco.version.service",
-	HandlerType: (*ServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "version",
-			Handler:    _Service_Version_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "version.proto",
 }

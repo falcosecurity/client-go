@@ -13,7 +13,7 @@ TEST_FLAGS ?= -v -race
 
 PROTOS := pkg/api/schema/schema.proto pkg/api/outputs/outputs.proto pkg/api/version/version.proto
 PROTO_URLS := https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/schema.proto https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/outputs.proto https://raw.githubusercontent.com/falcosecurity/falco/master/userspace/falco/version.proto
-PROTO_SHAS := ad4e9d62717e82b9fb9ec30625d392fd66ced3e53eb73faea739c63063650ac3 5e3bdc564c4d38f7d70a8fe50e6022a733ed93197edff6b824a24c6a45fed6c3 c57a8a3f37a14ca8f33ce6d26156c9348e716029bca87bf9143807a68b1f31f5
+PROTO_SHAS := ad4e9d62717e82b9fb9ec30625d392fd66ced3e53eb73faea739c63063650ac3 18fa7f7a4870ae0e0703c775fda41362aa654445893546d9b2d49f59dd487026 c57a8a3f37a14ca8f33ce6d26156c9348e716029bca87bf9143807a68b1f31f5
 
 PROTO_DIRS := $(dir ${PROTOS})
 PROTO_DIRS_INCLUDES := $(patsubst %/, -I %, ${PROTO_DIRS})
@@ -32,7 +32,7 @@ $(1):
 	@mkdir -p ${PROTO_DIRS}
 	@curl --silent -Lo $(1) $(2)
 	@echo $(3) $(1) | sha256sum -c
-	@${PROTOC} ${PROTO_DIRS_INCLUDES} $(1) --go_out=plugins=grpc,paths=source_relative:$(dir $(1))
+	@${PROTOC} ${PROTO_DIRS_INCLUDES} $(1) --go_out=paths=source_relative:$(dir $(1)) --go-grpc_out=paths=source_relative:$(dir $(1))
 endef
 $(foreach PROTO,$(PROTOS),\
 	$(eval $(call download_rule,$(PROTO),$(firstword $(PROTO_URLS)),$(firstword $(PROTO_SHAS))))\
