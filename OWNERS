@@ -1,14 +1,9 @@
 approvers:
   - leodido
   - leogr
+emeritus_approvers:
   - fntlnz
   - kris-nova
   - mfdii
   - markyjackson-taulia
-reviewers:
-  - leodido
-  - leogr
-  - fntlnz
-  - kris-nova
-  - mfdii
-  - markyjackson-taulia
+  
