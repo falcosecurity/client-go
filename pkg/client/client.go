@@ -33,6 +33,7 @@ type Config struct {
 	CARootFile     string
 	UnixSocketPath string
 	DialOptions    []grpc.DialOption
+	GRPCAuth       bool
 }
 
 const targetFormat = "%s:%d"
@@ -56,42 +57,72 @@ func newUnixSocketClient(ctx context.Context, config *Config) (*Client, error) {
 	}, nil
 }
 
-func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {
+func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {  //problem somewhere here
+
 	certificate, err := tls.LoadX509KeyPair(
-		config.CertFile,
-		config.KeyFile,
+		config.CertFile,	
+		config.KeyFile,		
 	)
+
+
 	if err != nil {
 		return nil, fmt.Errorf("error loading the X.509 key pair: %v", err)
 	}
 
-	certPool := x509.NewCertPool()
-	rootCA, err := ioutil.ReadFile(config.CARootFile)
-	if err != nil {
-		return nil, fmt.Errorf("error reading the CA Root file certificate: %v", err)
-	}
+	
+	if(config.GRPCAuth){
+		certPool := x509.NewCertPool()
+		rootCA, err := ioutil.ReadFile(config.CARootFile) //rootCA has correct value, at least translates into correct ascii; that doesnt happen w/ x509 however the values remain the same if you force them or not 
+		
 
-	ok := certPool.AppendCertsFromPEM(rootCA)
-	if !ok {
-		return nil, fmt.Errorf("error appending the root CA to the certificate pool")
-	}
+		if err != nil {
+			return nil, fmt.Errorf("error reading the CA Root file certificate: %v", err)
+		}
 
+		ok := certPool.AppendCertsFromPEM(rootCA)
+		if !ok {
+			return nil, fmt.Errorf("error appending the root CA to the certificate pool")
+		}
+		transportCreds := credentials.NewTLS(&tls.Config{
+			ServerName:   config.Hostname,
+			Certificates: []tls.Certificate{certificate},
+			RootCAs:      certPool,
+		})
+		dialOptions := append(config.DialOptions, grpc.WithTransportCredentials(transportCreds))
+
+		conn, err := grpc.DialContext(ctx, fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOptions...) 
+
+		if err != nil {
+			return nil, fmt.Errorf("error dialing server: %v", err)
+		}
+
+		return &Client{
+			conn: conn,
+		}, nil
+	}
 	transportCreds := credentials.NewTLS(&tls.Config{
-		ServerName:   config.Hostname,
-		Certificates: []tls.Certificate{certificate},
-		RootCAs:      certPool,
-	})
+			ServerName:   config.Hostname,
+			Certificates: []tls.Certificate{certificate},
+			InsecureSkipVerify: true, 
 
-	dialOptions := append(config.DialOptions, grpc.WithTransportCredentials(transportCreds))
-	conn, err := grpc.DialContext(ctx, fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOptions...)
-	if err != nil {
-		return nil, fmt.Errorf("error dialing server: %v", err)
-	}
+		})
+		dialOptions := append(config.DialOptions, grpc.WithTransportCredentials(transportCreds))
 
-	return &Client{
-		conn: conn,
-	}, nil
+		conn, err := grpc.DialContext(ctx, fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOptions...) 
+
+		if err != nil {
+			return nil, fmt.Errorf("error dialing server: %v", err)
+		}
+
+		return &Client{
+			conn: conn,
+		}, nil
+	
+
+
 }
+
+
 
 // Outputs is the client for Falco Outputs.
 // When using it you can use `Sub()` or `Get()` to receive a stream of Falco output events.
