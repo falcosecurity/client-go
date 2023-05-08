@@ -72,7 +72,7 @@ func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {  /
 	
 	if(config.GRPCAuth){
 		certPool := x509.NewCertPool()
-		rootCA, err := ioutil.ReadFile(config.CARootFile) //rootCA has correct value, at least translates into correct ascii; that doesnt happen w/ x509 however the values remain the same if you force them or not 
+		rootCA, err := ioutil.ReadFile(config.CARootFile) 
 		
 
 		if err != nil {
