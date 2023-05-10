@@ -57,28 +57,21 @@ func newUnixSocketClient(ctx context.Context, config *Config) (*Client, error) {
 	}, nil
 }
 
-func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {  //problem somewhere here
+func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {  
 
 	certificate, err := tls.LoadX509KeyPair(
-		config.CertFile,	
-		config.KeyFile,		
+		config.CertFile,
+		config.KeyFile,
 	)
-
-
 	if err != nil {
 		return nil, fmt.Errorf("error loading the X.509 key pair: %v", err)
 	}
-
-	
 	if(config.GRPCAuth){
 		certPool := x509.NewCertPool()
 		rootCA, err := ioutil.ReadFile(config.CARootFile) 
-		
-
 		if err != nil {
 			return nil, fmt.Errorf("error reading the CA Root file certificate: %v", err)
 		}
-
 		ok := certPool.AppendCertsFromPEM(rootCA)
 		if !ok {
 			return nil, fmt.Errorf("error appending the root CA to the certificate pool")
@@ -89,13 +82,10 @@ func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {  /
 			RootCAs:      certPool,
 		})
 		dialOptions := append(config.DialOptions, grpc.WithTransportCredentials(transportCreds))
-
 		conn, err := grpc.DialContext(ctx, fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOptions...) 
-
 		if err != nil {
 			return nil, fmt.Errorf("error dialing server: %v", err)
 		}
-
 		return &Client{
 			conn: conn,
 		}, nil
@@ -107,19 +97,13 @@ func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {  /
 
 		})
 		dialOptions := append(config.DialOptions, grpc.WithTransportCredentials(transportCreds))
-
 		conn, err := grpc.DialContext(ctx, fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOptions...) 
-
 		if err != nil {
 			return nil, fmt.Errorf("error dialing server: %v", err)
 		}
-
 		return &Client{
 			conn: conn,
 		}, nil
-	
-
-
 }
 
 
