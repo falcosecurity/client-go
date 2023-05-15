@@ -26,14 +26,14 @@ type Client struct {
 
 // Config is the configuration definition for connecting to a Falco gRPC server.
 type Config struct {
-	Hostname       string
-	Port           uint16
-	CertFile       string
-	KeyFile        string
-	CARootFile     string
-	UnixSocketPath string
-	DialOptions    []grpc.DialOption
-	GRPCAuth       bool
+	Hostname       					string
+	Port           					uint16
+	CertFile       					string
+	KeyFile        					string
+	CARootFile     					string
+	UnixSocketPath 					string
+	DialOptions    					[]grpc.DialOption
+	InsecureSkipMutualTLSAuth       bool
 }
 
 const targetFormat = "%s:%d"
@@ -66,31 +66,8 @@ func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error loading the X.509 key pair: %v", err)
 	}
-	if(config.GRPCAuth){
-		certPool := x509.NewCertPool()
-		rootCA, err := ioutil.ReadFile(config.CARootFile) 
-		if err != nil {
-			return nil, fmt.Errorf("error reading the CA Root file certificate: %v", err)
-		}
-		ok := certPool.AppendCertsFromPEM(rootCA)
-		if !ok {
-			return nil, fmt.Errorf("error appending the root CA to the certificate pool")
-		}
+	if(config.InsecureSkipMutualTLSAuth){
 		transportCreds := credentials.NewTLS(&tls.Config{
-			ServerName:   config.Hostname,
-			Certificates: []tls.Certificate{certificate},
-			RootCAs:      certPool,
-		})
-		dialOptions := append(config.DialOptions, grpc.WithTransportCredentials(transportCreds))
-		conn, err := grpc.DialContext(ctx, fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOptions...) 
-		if err != nil {
-			return nil, fmt.Errorf("error dialing server: %v", err)
-		}
-		return &Client{
-			conn: conn,
-		}, nil
-	}
-	transportCreds := credentials.NewTLS(&tls.Config{
 			ServerName:   config.Hostname,
 			Certificates: []tls.Certificate{certificate},
 			InsecureSkipVerify: true, 
@@ -104,6 +81,31 @@ func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {
 		return &Client{
 			conn: conn,
 		}, nil
+	}
+
+	certPool := x509.NewCertPool()
+	rootCA, err := ioutil.ReadFile(config.CARootFile) 
+	if err != nil {
+		return nil, fmt.Errorf("error reading the CA Root file certificate: %v", err)
+	}
+	ok := certPool.AppendCertsFromPEM(rootCA)
+	if !ok {
+		return nil, fmt.Errorf("error appending the root CA to the certificate pool")
+	}
+	transportCreds := credentials.NewTLS(&tls.Config{
+		ServerName:   config.Hostname,
+		Certificates: []tls.Certificate{certificate},
+		RootCAs:      certPool,
+	})
+	dialOptions := append(config.DialOptions, grpc.WithTransportCredentials(transportCreds))
+	conn, err := grpc.DialContext(ctx, fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOptions...) 
+	if err != nil {
+		return nil, fmt.Errorf("error dialing server: %v", err)
+	}
+	return &Client{
+		conn: conn,
+	}, nil
+	
 }
 
 
