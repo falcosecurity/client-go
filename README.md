@@ -1,4 +1,7 @@
 # Falco Go Client
+
+[![Falco Ecosystem Repository](https://github.com/falcosecurity/evolution/blob/main/repos/badges/falco-ecosystem-blue.svg)](https://github.com/falcosecurity/evolution/blob/main/REPOSITORIES.md#ecosystem-scope) [![Incubating](https://img.shields.io/badge/status-incubating-orange?style=for-the-badge)](https://github.com/falcosecurity/evolution/blob/main/REPOSITORIES.md#incubating)
+
 [![GoDoc](https://godoc.org/github.com/falcosecurity/client-go/pkg/client?status.svg)](https://godoc.org/github.com/falcosecurity/client-go/pkg/client)
 
 > Go client and SDK for Falco
