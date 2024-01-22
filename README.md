@@ -57,7 +57,7 @@ imports(
 
 func main() {
     c, err := client.NewForConfig(context.Background(), &client.Config{
-        UnixSocketPath:   "unix:///var/run/falco.sock",
+        UnixSocketPath:   "unix:///run/falco/falco.sock",
     })
 }
 ```
