@@ -13,7 +13,7 @@ import (
 func main() {
 	// Set up a connection to the server.
 	c, err := client.NewForConfig(context.Background(), &client.Config{
-		UnixSocketPath: "unix:///var/run/falco.sock",
+		UnixSocketPath: "unix:///run/falco/falco.sock",
 	})
 	if err != nil {
 		log.Fatalf("unable to create a Falco client: %v", err)
