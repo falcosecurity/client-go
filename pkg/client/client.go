@@ -58,7 +58,6 @@ func newUnixSocketClient(ctx context.Context, config *Config) (*Client, error) {
 }
 
 func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {  
-
 	certificate, err := tls.LoadX509KeyPair(
 		config.CertFile,
 		config.KeyFile,
@@ -96,10 +95,7 @@ func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {
 	return &Client{
 		conn: conn,
 	}, nil
-	
 }
-
-
 
 // Outputs is the client for Falco Outputs.
 // When using it you can use `Sub()` or `Get()` to receive a stream of Falco output events.
