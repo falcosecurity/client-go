@@ -66,31 +66,22 @@ func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error loading the X.509 key pair: %v", err)
 	}
-	if(config.InsecureSkipMutualTLSAuth){
-		transportCreds := credentials.NewTLS(&tls.Config{
-			ServerName:   config.Hostname,
-			Certificates: []tls.Certificate{certificate},
-			InsecureSkipVerify: true, 
-
-		})
-		dialOptions := append(config.DialOptions, grpc.WithTransportCredentials(transportCreds))
-		conn, err := grpc.DialContext(ctx, fmt.Sprintf(targetFormat, config.Hostname, config.Port), dialOptions...) 
-		if err != nil {
-			return nil, fmt.Errorf("error dialing server: %v", err)
-		}
-		return &Client{
-			conn: conn,
-		}, nil
+	tlsConfig := tls.Config {
+		ServerName:   config.Hostname,
+		Certificates: []tls.Certificate{certificate},
+		InsecureSkipVerify: config.InsecureSkipMutualTLSAuth,
 	}
-
 	certPool := x509.NewCertPool()
-	rootCA, err := ioutil.ReadFile(config.CARootFile) 
-	if err != nil {
-		return nil, fmt.Errorf("error reading the CA Root file certificate: %v", err)
-	}
-	ok := certPool.AppendCertsFromPEM(rootCA)
-	if !ok {
-		return nil, fmt.Errorf("error appending the root CA to the certificate pool")
+	if(!config.InsecureSkipMutualTLSAuth){
+		rootCA, err := ioutil.ReadFile(config.CARootFile)
+		if err != nil {
+			return nil, fmt.Errorf("error reading the CA Root file certificate: %v", err)
+		}
+		ok := certPool.AppendCertsFromPEM(rootCA)
+		if !ok {
+			return nil, fmt.Errorf("error appending the root CA to the certificate pool")
+		}
+		tlsConfig.RootCAs = certPool
 	}
 	transportCreds := credentials.NewTLS(&tls.Config{
 		ServerName:   config.Hostname,
