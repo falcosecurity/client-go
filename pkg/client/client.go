@@ -26,14 +26,14 @@ type Client struct {
 
 // Config is the configuration definition for connecting to a Falco gRPC server.
 type Config struct {
-	Hostname       					string
-	Port           					uint16
-	CertFile       					string
-	KeyFile        					string
-	CARootFile     					string
-	UnixSocketPath 					string
-	DialOptions    					[]grpc.DialOption
-	InsecureSkipMutualTLSAuth       bool
+	Hostname 			string
+	Port 				uint16
+	CertFile 			string
+	KeyFile 			string
+	CARootFile 			string
+	UnixSocketPath 			string
+	DialOptions 			[]grpc.DialOption
+	InsecureSkipMutualTLSAuth 	bool
 }
 
 const targetFormat = "%s:%d"
@@ -71,7 +71,7 @@ func newNetworkClient(ctx context.Context, config *Config) (*Client, error) {
 		InsecureSkipVerify: config.InsecureSkipMutualTLSAuth,
 	}
 	certPool := x509.NewCertPool()
-	if(!config.InsecureSkipMutualTLSAuth){
+	if !config.InsecureSkipMutualTLSAuth {
 		rootCA, err := ioutil.ReadFile(config.CARootFile)
 		if err != nil {
 			return nil, fmt.Errorf("error reading the CA Root file certificate: %v", err)
